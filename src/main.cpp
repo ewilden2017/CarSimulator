@@ -15,7 +15,7 @@ GLFWwindow* window;
 #include <glm/gtx/string_cast.hpp>
 using namespace glm;
 
-#include "common/shader.hpp"
+#include "shader.hpp"
 #include "car.h"
 
 Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
