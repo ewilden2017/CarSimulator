@@ -11,7 +11,7 @@ const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
 const int MAX_CARS = 50;
-const int SCALE_FACTOR = 5
+const int SCALE_FACTOR = 5;
 
 class Car {
 public:

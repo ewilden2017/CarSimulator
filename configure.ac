@@ -6,6 +6,9 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([foreign 1.11 -Wall -Werror])
 AC_CONFIG_FILES([Makefile])
 AC_PROG_CXX
+
+#PKG-CONFIG
+PKG_CHECK_MODULES([DEPS], [glfw3 glew])
 #other stuff
 
 AC_OUTPUT

@@ -43,31 +43,31 @@ PATH: /home/wildenberg/android-dev/android-studio/bin
 ## Core tests. ##
 ## ----------- ##
 
-configure:1837: checking for a BSD-compatible install
-configure:1905: result: /usr/bin/install -c
-configure:1916: checking whether build environment is sane
-configure:1971: result: yes
-configure:2122: checking for a thread-safe mkdir -p
-configure:2161: result: /usr/bin/mkdir -p
-configure:2168: checking for gawk
-configure:2184: found /usr/bin/gawk
-configure:2195: result: gawk
-configure:2206: checking whether make sets $(MAKE)
-configure:2228: result: yes
-configure:2257: checking whether make supports nested variables
-configure:2274: result: yes
-configure:2459: checking for g++
-configure:2475: found /usr/bin/g++
-configure:2486: result: g++
-configure:2513: checking for C++ compiler version
-configure:2522: g++ --version >&5
+configure:1854: checking for a BSD-compatible install
+configure:1922: result: /usr/bin/install -c
+configure:1933: checking whether build environment is sane
+configure:1988: result: yes
+configure:2139: checking for a thread-safe mkdir -p
+configure:2178: result: /usr/bin/mkdir -p
+configure:2185: checking for gawk
+configure:2201: found /usr/bin/gawk
+configure:2212: result: gawk
+configure:2223: checking whether make sets $(MAKE)
+configure:2245: result: yes
+configure:2274: checking whether make supports nested variables
+configure:2291: result: yes
+configure:2476: checking for g++
+configure:2492: found /usr/bin/g++
+configure:2503: result: g++
+configure:2530: checking for C++ compiler version
+configure:2539: g++ --version >&5
 g++ (GCC) 4.9.2 20150212 (Red Hat 4.9.2-6)
 Copyright (C) 2014 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:2533: $? = 0
-configure:2522: g++ -v >&5
+configure:2550: $? = 0
+configure:2539: g++ -v >&5
 Using built-in specs.
 COLLECT_GCC=g++
 COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.9.2/lto-wrapper
@@ -75,52 +75,63 @@ Target: x86_64-redhat-linux
 Configured with: ../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.9.2-20150212/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.9.2-20150212/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux
 Thread model: posix
 gcc version 4.9.2 20150212 (Red Hat 4.9.2-6) (GCC) 
-configure:2533: $? = 0
-configure:2522: g++ -V >&5
+configure:2550: $? = 0
+configure:2539: g++ -V >&5
 g++: error: unrecognized command line option '-V'
 g++: fatal error: no input files
 compilation terminated.
-configure:2533: $? = 4
-configure:2522: g++ -qversion >&5
+configure:2550: $? = 4
+configure:2539: g++ -qversion >&5
 g++: error: unrecognized command line option '-qversion'
 g++: fatal error: no input files
 compilation terminated.
-configure:2533: $? = 4
-configure:2553: checking whether the C++ compiler works
-configure:2575: g++    conftest.cpp  >&5
-configure:2579: $? = 0
-configure:2627: result: yes
-configure:2630: checking for C++ compiler default output file name
-configure:2632: result: a.out
-configure:2638: checking for suffix of executables
-configure:2645: g++ -o conftest    conftest.cpp  >&5
-configure:2649: $? = 0
-configure:2671: result: 
-configure:2693: checking whether we are cross compiling
-configure:2701: g++ -o conftest    conftest.cpp  >&5
-configure:2705: $? = 0
-configure:2712: ./conftest
-configure:2716: $? = 0
-configure:2731: result: no
-configure:2736: checking for suffix of object files
-configure:2758: g++ -c   conftest.cpp >&5
-configure:2762: $? = 0
-configure:2783: result: o
-configure:2787: checking whether we are using the GNU C++ compiler
-configure:2806: g++ -c   conftest.cpp >&5
-configure:2806: $? = 0
-configure:2815: result: yes
-configure:2824: checking whether g++ accepts -g
-configure:2844: g++ -c -g  conftest.cpp >&5
-configure:2844: $? = 0
-configure:2885: result: yes
-configure:2919: checking for style of include used by make
-configure:2947: result: GNU
-configure:2973: checking dependency style of g++
-configure:3084: result: gcc3
-configure:3210: checking that generated files are newer than configure
-configure:3216: result: done
-configure:3239: creating ./config.status
+configure:2550: $? = 4
+configure:2570: checking whether the C++ compiler works
+configure:2592: g++    conftest.cpp  >&5
+configure:2596: $? = 0
+configure:2644: result: yes
+configure:2647: checking for C++ compiler default output file name
+configure:2649: result: a.out
+configure:2655: checking for suffix of executables
+configure:2662: g++ -o conftest    conftest.cpp  >&5
+configure:2666: $? = 0
+configure:2688: result: 
+configure:2710: checking whether we are cross compiling
+configure:2718: g++ -o conftest    conftest.cpp  >&5
+configure:2722: $? = 0
+configure:2729: ./conftest
+configure:2733: $? = 0
+configure:2748: result: no
+configure:2753: checking for suffix of object files
+configure:2775: g++ -c   conftest.cpp >&5
+configure:2779: $? = 0
+configure:2800: result: o
+configure:2804: checking whether we are using the GNU C++ compiler
+configure:2823: g++ -c   conftest.cpp >&5
+configure:2823: $? = 0
+configure:2832: result: yes
+configure:2841: checking whether g++ accepts -g
+configure:2861: g++ -c -g  conftest.cpp >&5
+configure:2861: $? = 0
+configure:2902: result: yes
+configure:2936: checking for style of include used by make
+configure:2964: result: GNU
+configure:2990: checking dependency style of g++
+configure:3101: result: gcc3
+configure:3172: checking for pkg-config
+configure:3190: found /usr/bin/pkg-config
+configure:3202: result: /usr/bin/pkg-config
+configure:3227: checking pkg-config is at least version 0.9.0
+configure:3230: result: yes
+configure:3240: checking for DEPS
+configure:3247: $PKG_CONFIG --exists --print-errors "glfw3 glew"
+configure:3250: $? = 0
+configure:3264: $PKG_CONFIG --exists --print-errors "glfw3 glew"
+configure:3267: $? = 0
+configure:3325: result: yes
+configure:3440: checking that generated files are newer than configure
+configure:3446: result: done
+configure:3469: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -137,9 +148,10 @@ generated by GNU Autoconf 2.69.  Invocation command line was
 
 on localhost.localdomain
 
-config.status:839: creating Makefile
-config.status:839: creating config.h
-config.status:1068: executing depfiles commands
+config.status:844: creating Makefile
+config.status:844: creating config.h
+config.status:1025: config.h is unchanged
+config.status:1073: executing depfiles commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -154,10 +166,20 @@ ac_cv_env_CXXFLAGS_set=
 ac_cv_env_CXXFLAGS_value=
 ac_cv_env_CXX_set=
 ac_cv_env_CXX_value=
+ac_cv_env_DEPS_CFLAGS_set=
+ac_cv_env_DEPS_CFLAGS_value=
+ac_cv_env_DEPS_LIBS_set=
+ac_cv_env_DEPS_LIBS_value=
 ac_cv_env_LDFLAGS_set=
 ac_cv_env_LDFLAGS_value=
 ac_cv_env_LIBS_set=
 ac_cv_env_LIBS_value=
+ac_cv_env_PKG_CONFIG_LIBDIR_set=
+ac_cv_env_PKG_CONFIG_LIBDIR_value=
+ac_cv_env_PKG_CONFIG_PATH_set=
+ac_cv_env_PKG_CONFIG_PATH_value=
+ac_cv_env_PKG_CONFIG_set=
+ac_cv_env_PKG_CONFIG_value=
 ac_cv_env_build_alias_set=
 ac_cv_env_build_alias_value=
 ac_cv_env_host_alias_set=
@@ -165,6 +187,7 @@ ac_cv_env_host_alias_value=
 ac_cv_env_target_alias_set=
 ac_cv_env_target_alias_value=
 ac_cv_objext=o
+ac_cv_path_ac_pt_PKG_CONFIG=/usr/bin/pkg-config
 ac_cv_path_install='/usr/bin/install -c'
 ac_cv_path_mkdir=/usr/bin/mkdir
 ac_cv_prog_AWK=gawk
@@ -173,6 +196,8 @@ ac_cv_prog_cxx_g=yes
 ac_cv_prog_make_make_set=yes
 am_cv_CXX_dependencies_compiler_type=gcc3
 am_cv_make_support_nested_variables=yes
+pkg_cv_DEPS_CFLAGS='-I/usr/include/GL -I/usr/include/libdrm '
+pkg_cv_DEPS_LIBS='-lglfw -lGLEW -lGLU -lGL '
 
 ## ----------------- ##
 ## Output variables. ##
@@ -198,6 +223,8 @@ CXXFLAGS='-g -O2'
 CYGPATH_W='echo'
 DEFS='-DHAVE_CONFIG_H'
 DEPDIR='.deps'
+DEPS_CFLAGS='-I/usr/include/GL -I/usr/include/libdrm '
+DEPS_LIBS='-lglfw -lGLEW -lGLU -lGL '
 ECHO_C=''
 ECHO_N='-n'
 ECHO_T=''
@@ -221,6 +248,9 @@ PACKAGE_TARNAME='carsim'
 PACKAGE_URL=''
 PACKAGE_VERSION='0.0.1'
 PATH_SEPARATOR=':'
+PKG_CONFIG='/usr/bin/pkg-config'
+PKG_CONFIG_LIBDIR=''
+PKG_CONFIG_PATH=''
 SET_MAKE=''
 SHELL='/bin/sh'
 STRIP=''
@@ -296,5 +326,77 @@ generated by GNU Autoconf 2.69.  Invocation command line was
 
 on localhost.localdomain
 
-config.status:839: creating config.h
-config.status:1020: config.h is unchanged
+config.status:844: creating config.h
+config.status:1025: config.h is unchanged
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by CarSim config.status 0.0.1, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status Makefile depfiles
+
+on localhost.localdomain
+
+config.status:844: creating Makefile
+config.status:1073: executing depfiles commands
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by CarSim config.status 0.0.1, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status Makefile depfiles
+
+on localhost.localdomain
+
+config.status:844: creating Makefile
+config.status:1073: executing depfiles commands
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by CarSim config.status 0.0.1, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status Makefile depfiles
+
+on localhost.localdomain
+
+config.status:844: creating Makefile
+config.status:1073: executing depfiles commands
+
+## ---------------------- ##
+## Running config.status. ##
+## ---------------------- ##
+
+This file was extended by CarSim config.status 0.0.1, which was
+generated by GNU Autoconf 2.69.  Invocation command line was
+
+  CONFIG_FILES    = 
+  CONFIG_HEADERS  = 
+  CONFIG_LINKS    = 
+  CONFIG_COMMANDS = 
+  $ ./config.status Makefile depfiles
+
+on localhost.localdomain
+
+config.status:844: creating Makefile
+config.status:1073: executing depfiles commands

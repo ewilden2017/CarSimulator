@@ -96,9 +96,10 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_CarSim_OBJECTS = main.$(OBJEXT) car.$(OBJEXT)
+am_CarSim_OBJECTS = main.$(OBJEXT) car.$(OBJEXT) shader.$(OBJEXT)
 CarSim_OBJECTS = $(am_CarSim_OBJECTS)
-CarSim_LDADD = $(LDADD)
+am__DEPENDENCIES_1 =
+CarSim_DEPENDENCIES = $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -200,6 +201,8 @@ CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
+DEPS_CFLAGS = -I/usr/include/GL -I/usr/include/libdrm 
+DEPS_LIBS = -lglfw -lGLEW -lGLU -lGL 
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
@@ -224,6 +227,9 @@ PACKAGE_TARNAME = carsim
 PACKAGE_URL = 
 PACKAGE_VERSION = 0.0.1
 PATH_SEPARATOR = :
+PKG_CONFIG = /usr/bin/pkg-config
+PKG_CONFIG_LIBDIR = 
+PKG_CONFIG_PATH = 
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
@@ -270,7 +276,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-CarSim_SOURCES = main.cpp car.cpp car.h
+CarSim_SOURCES = main.cpp car.cpp car.h shader.cpp shader.hpp
+AM_CXXFLAGS = $(DEPS_CFLAGS)
+CarSim_LDADD = $(DEPS_LIBS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -380,6 +388,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/car.Po
 include ./$(DEPDIR)/main.Po
+include ./$(DEPDIR)/shader.Po
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
