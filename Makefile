@@ -97,8 +97,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_CarSim_OBJECTS = CarSim-main.$(OBJEXT) CarSim-car.$(OBJEXT) \
-	CarSim-shader.$(OBJEXT)
+am__dirstamp = $(am__leading_dot)dirstamp
+am_CarSim_OBJECTS = src/CarSim-main.$(OBJEXT) src/CarSim-car.$(OBJEXT) \
+	src/CarSim-shader.$(OBJEXT)
 CarSim_OBJECTS = $(am_CarSim_OBJECTS)
 am__DEPENDENCIES_1 =
 CarSim_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -285,7 +286,7 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 ACLOCAL_AMFLAGS = -I m4 --install
-CarSim_SOURCES = main.cpp car.cpp car.h shader.cpp shader.hpp
+CarSim_SOURCES = src/main.cpp src/car.cpp src/car.h src/shader.cpp src/shader.hpp
 CarSim_CXXFLAGS = $(DEPS_CFLAGS)
 CarSim_LDADD = $(DEPS_LIBS)
 all: config.h
@@ -384,6 +385,18 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+src/$(am__dirstamp):
+	@$(MKDIR_P) src
+	@: > src/$(am__dirstamp)
+src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/$(DEPDIR)
+	@: > src/$(DEPDIR)/$(am__dirstamp)
+src/CarSim-main.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/CarSim-car.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/CarSim-shader.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 
 CarSim$(EXEEXT): $(CarSim_OBJECTS) $(CarSim_DEPENDENCIES) $(EXTRA_CarSim_DEPENDENCIES) 
 	@rm -f CarSim$(EXEEXT)
@@ -391,69 +404,72 @@ CarSim$(EXEEXT): $(CarSim_OBJECTS) $(CarSim_DEPENDENCIES) $(EXTRA_CarSim_DEPENDE
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f src/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/CarSim-car.Po
-include ./$(DEPDIR)/CarSim-main.Po
-include ./$(DEPDIR)/CarSim-shader.Po
+include src/$(DEPDIR)/CarSim-car.Po
+include src/$(DEPDIR)/CarSim-main.Po
+include src/$(DEPDIR)/CarSim-shader.Po
 
 .cpp.o:
-	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+	$(am__mv) $$depbase.Tpo $$depbase.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-CarSim-main.o: main.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-main.o -MD -MP -MF $(DEPDIR)/CarSim-main.Tpo -c -o CarSim-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-main.Tpo $(DEPDIR)/CarSim-main.Po
-#	$(AM_V_CXX)source='main.cpp' object='CarSim-main.o' libtool=no \
+src/CarSim-main.o: src/main.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-main.o -MD -MP -MF src/$(DEPDIR)/CarSim-main.Tpo -c -o src/CarSim-main.o `test -f 'src/main.cpp' || echo '$(srcdir)/'`src/main.cpp
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-main.Tpo src/$(DEPDIR)/CarSim-main.Po
+#	$(AM_V_CXX)source='src/main.cpp' object='src/CarSim-main.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-main.o `test -f 'main.cpp' || echo '$(srcdir)/'`main.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-main.o `test -f 'src/main.cpp' || echo '$(srcdir)/'`src/main.cpp
 
-CarSim-main.obj: main.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-main.obj -MD -MP -MF $(DEPDIR)/CarSim-main.Tpo -c -o CarSim-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-main.Tpo $(DEPDIR)/CarSim-main.Po
-#	$(AM_V_CXX)source='main.cpp' object='CarSim-main.obj' libtool=no \
+src/CarSim-main.obj: src/main.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-main.obj -MD -MP -MF src/$(DEPDIR)/CarSim-main.Tpo -c -o src/CarSim-main.obj `if test -f 'src/main.cpp'; then $(CYGPATH_W) 'src/main.cpp'; else $(CYGPATH_W) '$(srcdir)/src/main.cpp'; fi`
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-main.Tpo src/$(DEPDIR)/CarSim-main.Po
+#	$(AM_V_CXX)source='src/main.cpp' object='src/CarSim-main.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-main.obj `if test -f 'main.cpp'; then $(CYGPATH_W) 'main.cpp'; else $(CYGPATH_W) '$(srcdir)/main.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-main.obj `if test -f 'src/main.cpp'; then $(CYGPATH_W) 'src/main.cpp'; else $(CYGPATH_W) '$(srcdir)/src/main.cpp'; fi`
 
-CarSim-car.o: car.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-car.o -MD -MP -MF $(DEPDIR)/CarSim-car.Tpo -c -o CarSim-car.o `test -f 'car.cpp' || echo '$(srcdir)/'`car.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-car.Tpo $(DEPDIR)/CarSim-car.Po
-#	$(AM_V_CXX)source='car.cpp' object='CarSim-car.o' libtool=no \
+src/CarSim-car.o: src/car.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-car.o -MD -MP -MF src/$(DEPDIR)/CarSim-car.Tpo -c -o src/CarSim-car.o `test -f 'src/car.cpp' || echo '$(srcdir)/'`src/car.cpp
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-car.Tpo src/$(DEPDIR)/CarSim-car.Po
+#	$(AM_V_CXX)source='src/car.cpp' object='src/CarSim-car.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-car.o `test -f 'car.cpp' || echo '$(srcdir)/'`car.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-car.o `test -f 'src/car.cpp' || echo '$(srcdir)/'`src/car.cpp
 
-CarSim-car.obj: car.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-car.obj -MD -MP -MF $(DEPDIR)/CarSim-car.Tpo -c -o CarSim-car.obj `if test -f 'car.cpp'; then $(CYGPATH_W) 'car.cpp'; else $(CYGPATH_W) '$(srcdir)/car.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-car.Tpo $(DEPDIR)/CarSim-car.Po
-#	$(AM_V_CXX)source='car.cpp' object='CarSim-car.obj' libtool=no \
+src/CarSim-car.obj: src/car.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-car.obj -MD -MP -MF src/$(DEPDIR)/CarSim-car.Tpo -c -o src/CarSim-car.obj `if test -f 'src/car.cpp'; then $(CYGPATH_W) 'src/car.cpp'; else $(CYGPATH_W) '$(srcdir)/src/car.cpp'; fi`
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-car.Tpo src/$(DEPDIR)/CarSim-car.Po
+#	$(AM_V_CXX)source='src/car.cpp' object='src/CarSim-car.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-car.obj `if test -f 'car.cpp'; then $(CYGPATH_W) 'car.cpp'; else $(CYGPATH_W) '$(srcdir)/car.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-car.obj `if test -f 'src/car.cpp'; then $(CYGPATH_W) 'src/car.cpp'; else $(CYGPATH_W) '$(srcdir)/src/car.cpp'; fi`
 
-CarSim-shader.o: shader.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-shader.o -MD -MP -MF $(DEPDIR)/CarSim-shader.Tpo -c -o CarSim-shader.o `test -f 'shader.cpp' || echo '$(srcdir)/'`shader.cpp
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-shader.Tpo $(DEPDIR)/CarSim-shader.Po
-#	$(AM_V_CXX)source='shader.cpp' object='CarSim-shader.o' libtool=no \
+src/CarSim-shader.o: src/shader.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-shader.o -MD -MP -MF src/$(DEPDIR)/CarSim-shader.Tpo -c -o src/CarSim-shader.o `test -f 'src/shader.cpp' || echo '$(srcdir)/'`src/shader.cpp
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-shader.Tpo src/$(DEPDIR)/CarSim-shader.Po
+#	$(AM_V_CXX)source='src/shader.cpp' object='src/CarSim-shader.o' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-shader.o `test -f 'shader.cpp' || echo '$(srcdir)/'`shader.cpp
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-shader.o `test -f 'src/shader.cpp' || echo '$(srcdir)/'`src/shader.cpp
 
-CarSim-shader.obj: shader.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT CarSim-shader.obj -MD -MP -MF $(DEPDIR)/CarSim-shader.Tpo -c -o CarSim-shader.obj `if test -f 'shader.cpp'; then $(CYGPATH_W) 'shader.cpp'; else $(CYGPATH_W) '$(srcdir)/shader.cpp'; fi`
-	$(AM_V_at)$(am__mv) $(DEPDIR)/CarSim-shader.Tpo $(DEPDIR)/CarSim-shader.Po
-#	$(AM_V_CXX)source='shader.cpp' object='CarSim-shader.obj' libtool=no \
+src/CarSim-shader.obj: src/shader.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -MT src/CarSim-shader.obj -MD -MP -MF src/$(DEPDIR)/CarSim-shader.Tpo -c -o src/CarSim-shader.obj `if test -f 'src/shader.cpp'; then $(CYGPATH_W) 'src/shader.cpp'; else $(CYGPATH_W) '$(srcdir)/src/shader.cpp'; fi`
+	$(AM_V_at)$(am__mv) src/$(DEPDIR)/CarSim-shader.Tpo src/$(DEPDIR)/CarSim-shader.Po
+#	$(AM_V_CXX)source='src/shader.cpp' object='src/CarSim-shader.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o CarSim-shader.obj `if test -f 'shader.cpp'; then $(CYGPATH_W) 'shader.cpp'; else $(CYGPATH_W) '$(srcdir)/shader.cpp'; fi`
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(CarSim_CXXFLAGS) $(CXXFLAGS) -c -o src/CarSim-shader.obj `if test -f 'src/shader.cpp'; then $(CYGPATH_W) 'src/shader.cpp'; else $(CYGPATH_W) '$(srcdir)/src/shader.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -710,6 +726,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -720,7 +738,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR)
+	-rm -rf src/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -768,7 +786,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR)
+	-rm -rf src/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
