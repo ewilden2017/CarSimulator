@@ -1,0 +1,28 @@
+# http://www.gnu.org/software/automake
+
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+/stamp-h1
+
+#object files and compiled program
+
+CarSim
+*.o
+src/*.o
+
+#other files
+Makefile
+config.h
+config.log
+config.status
+src/.deps
+src/.dirstamp

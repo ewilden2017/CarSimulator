@@ -2,12 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include <cmath>
 #include <math.h>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,6 +10,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "car.h"
+const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
 Car* Car::carList[MAX_CARS] = {NULL};
 int Car::carCount = 0;

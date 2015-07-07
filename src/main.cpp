@@ -17,8 +17,12 @@ using namespace glm;
 
 #include "shader.hpp"
 #include "car.h"
+#include "wall.h"
+
+const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
 Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+Wall myWall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(5.0f,5.0f,5.0f));
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -181,8 +185,10 @@ int main( void )
         
         Model *= myCar.update(deltaTime);
         
-        printf("Camera:%s\n", glm::to_string(Car::getCamera()).c_str());
-        printf("Model:%s\n", glm::to_string(Model).c_str());
+        //printf("Camera:%s\n", glm::to_string(Car::getCamera()).c_str());
+        //printf("Model:%s\n", glm::to_string(Model).c_str());
+        printf("Model:%s\n", glm::to_string(myWall.modelMatrix).c_str());
+        printf("Model:%f\n", myWall.angle);
         // Our ModelViewProjection : multiplication of our 3 matrices
         glm::mat4 MVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
         

@@ -1,14 +1,11 @@
 #ifndef CAR_H
 #define CAR_H
-#include <glm/glm.hpp>
 
 //one unit is 1/200 of the screen
 const float ACCEL_FACTOR = 0.2f; //units/sec^2
 const float STEER_FACTOR = 2.0f; //degrees/sec
 const float MAX_SPEED = 0.5f; //units/sec
 const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
-
-const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
 const int MAX_CARS = 50;
 const int SCALE_FACTOR = 5;
