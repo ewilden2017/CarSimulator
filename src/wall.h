@@ -18,8 +18,10 @@ public:
     float getLength();
     
     glm::vec3* getVerticies();
+    glm::mat4 getMatrix();
+    float getAngle();
 
-//private:
+private:
     glm::vec3 pointA;
     glm::vec3 pointB;
     float angle;

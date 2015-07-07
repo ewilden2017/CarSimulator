@@ -13,7 +13,6 @@ GLFWwindow* window;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
-using namespace glm;
 
 #include "shader.hpp"
 #include "car.h"
@@ -69,7 +68,7 @@ int init() {
     // Open a window and create its OpenGL context
     window = glfwCreateWindow( 1024, 768, "Tutorial 03 - Matrices", NULL, NULL);
     if( window == NULL ){
-        fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
+        fprintf( stderr, "Failed to open GLFW window.Is your GPU OpenGL 3.3 compatable?.\n" );
         glfwTerminate();
         return -1;
     }
@@ -187,8 +186,6 @@ int main( void )
         
         //printf("Camera:%s\n", glm::to_string(Car::getCamera()).c_str());
         //printf("Model:%s\n", glm::to_string(Model).c_str());
-        printf("Model:%s\n", glm::to_string(myWall.modelMatrix).c_str());
-        printf("Model:%f\n", myWall.angle);
         // Our ModelViewProjection : multiplication of our 3 matrices
         glm::mat4 MVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
         
