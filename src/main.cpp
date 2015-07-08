@@ -117,8 +117,12 @@ void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuff
 int main( void )
 {
     Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+    Car car2(glm::vec3(0.0f,5.0f,0.0f), glm::vec3(-1.0f,1.0f,0.0f));
     pCar = &myCar;
-    Wall myWall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(3.0f,10.0f,3.0f));
+    std::vector<Wall> walls;
+    for (int i = 0; i < 10; i++) {
+        walls.push_back(Wall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3((float)i,10.0f,0.0f)));
+    }
     
     int error = init();
     if (error != 0) {
@@ -135,7 +139,7 @@ int main( void )
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint ColorID = glGetUniformLocation(programID, "inColor");
     
-    glm::mat4 Projection = glm::ortho(-200.0f,200.0f,-200.0f,200.0f,0.0f,100.0f); // In world coordinates
+    glm::mat4 Projection = glm::ortho(-50.0f,50.0f,-50.0f,50.0f,0.0f,100.0f); // In world coordinates
     glm::mat4 View = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
     
     Car::setCamera(View);    
@@ -189,18 +193,24 @@ int main( void )
         double deltaTime = now - oldTime;
         oldTime = now;
         
-        glm::mat4 CarModel = myCar.update(deltaTime);
-        glm::mat4 Model = CarModel;
+        std::vector<Car*> carList = Car::getCarList();
         
         // Our ModelViewProjection : multiplication of our 3 matrices
-        glm::mat4 carMVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
-        glm::mat4 wallMVP = Projection * Car::getCamera() * glm::scale(myWall.getMatrix(), glm::vec3(5.0,5.0,5.0));
+        //glm::mat4 carMVP = Projection * Car::getCamera() * myCar.update(deltaTime); // Remember, matrix multiplication is the other way around
+        //glm::mat4 wallMVP = Projection * Car::getCamera() * walls.at(0).getMatrix();
         
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
         
-        render(programID, MatrixID, ColorID, carbuffer, carVAO, carMVP, CAR_COLOR);
-        render(programID, MatrixID, ColorID, wallbuffer, wallVAO, wallMVP, WALL_COLOR);
+        for(int i = 0; i < carList.size(); i++) {
+            glm::mat4 carMatrix = Projection * Car::getCamera() * carList.at(i)->update(deltaTime);
+            render(programID, MatrixID, ColorID, carbuffer, carVAO, carMatrix, CAR_COLOR);
+        }
+        
+        for(int i = 0; i < walls.size(); i++) {
+            glm::mat4 wallMatrix = Projection * Car::getCamera() * walls.at(i).getMatrix();
+            render(programID, MatrixID, ColorID, wallbuffer, wallVAO, wallMatrix, WALL_COLOR);
+        }
         
         //finish drawing
         glfwSwapBuffers(window);

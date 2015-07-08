@@ -19,7 +19,7 @@ int Car::carCount = 0;
 
 glm::mat4 Car::Camera = glm::mat4(1.0f);
 
-Car::Car(glm::vec3 center, glm::vec3 forward) {
+Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     if (Car::carCount >= MAX_CARS) {
         printf("Too many cars!\n");
         throw std::out_of_range("Max car limit exceeded.");
@@ -27,12 +27,11 @@ Car::Car(glm::vec3 center, glm::vec3 forward) {
     
     index = Car::carCount++;
     Car::carList.push_back(this);
-    printf("size:%i\n", Car::carList.size());
     
     printf("Making car %i\n", index);
     
     forwardVector = forward;
-    this->center = center;
+    this->setCenter(newCenter);
     
     speed = 0.0f;
     acceleration = 0.0f;
@@ -48,7 +47,6 @@ Car::Car(glm::vec3 center, glm::vec3 forward) {
 
 Car::~Car() {
     printf("destroying car %i\n", index);
-    printf("size:%i\n", Car::carList.size());
     Car::carList.erase(Car::carList.begin() + index);
 //    if (index != Car::carCount) {
 //        for (int i=index+1; i < Car::carCount;i++) {
@@ -151,7 +149,7 @@ glm::mat4 Car::update(float deltaTime) {
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f,speed,0.0f));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
-    center = glm::vec3(modelMatrix * glm::vec4(0.0f,0.0f,0.0f,1.0f));
+    center = glm::vec3(modelMatrix * glm::vec4(center,1.0f));
     center *= SCALE_FACTOR;
     
     if (hasCamera) {
