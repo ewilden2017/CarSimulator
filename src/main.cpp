@@ -19,9 +19,11 @@ GLFWwindow* window;
 #include "wall.h"
 
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
+const glm::vec3 CAR_COLOR = glm::vec3(0.0f,0.8f,0.9f);
+const glm::vec3 WALL_COLOR = glm::vec3(1.0f,0.0f,0.0f);
 
 Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
-Wall myWall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(5.0f,5.0f,5.0f));
+Wall myWall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(3.0f,10.0f,3.0f));
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -86,35 +88,19 @@ int init() {
     return 0;
 }
 
-void render(GLuint programID, GLuint MatrixID, GLuint* vertexbuffer, glm::mat4 MVP) {
-    glClear( GL_COLOR_BUFFER_BIT );
+void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) {
     glUseProgram(programID);
     
-    // Send our transformation to the currently bound shader, 
-    // in the "MVP" uniform
+    glBindVertexArray(VAO);
+    
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, *vertexbuffer);
-    glVertexAttribPointer(
-        0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
-        3,                  // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        (void*)0            // array buffer offset
-    );
-    
-    
+    glUniform3fv(ColorID, 1, &color[0]);
     
     // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle
     
-    glDisableVertexAttribArray(0);
-    
-    // Swap buffers
-    glfwSwapBuffers(window);
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
 
 int main( void )
@@ -127,15 +113,12 @@ int main( void )
     // black background
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
-    
     // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" );
     
     // Get a handle for our "MVP" uniform
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+    GLuint ColorID = glGetUniformLocation(programID, "inColor");
     
     glm::mat4 Projection = glm::ortho(-200.0f,200.0f,-200.0f,200.0f,0.0f,100.0f); // In world coordinates
     glm::mat4 View = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
@@ -152,12 +135,34 @@ int main( void )
         0.5f, -1.0f, 0.0f,
     };
     
-    GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    
+    GLuint carbuffer;
+    GLuint carVAO;
+    
+    glGenBuffers(1, &carbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, carbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(carData), carData, GL_STATIC_DRAW);
     
-   // Car::setWatch(&myCar);
+    glGenVertexArrays(1, &carVAO);
+    glBindVertexArray(carVAO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLuint wallbuffer;
+    GLuint wallVAO;
+    glGenBuffers(1, &wallbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, wallbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(wallData), wallData, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &wallVAO);
+    glBindVertexArray(wallVAO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0); 
+    
+//     Car::setWatch(&myCar);
     
     double frameLastTime = glfwGetTime();
     int nbFrames = 0;
@@ -186,18 +191,31 @@ int main( void )
         
         //printf("Camera:%s\n", glm::to_string(Car::getCamera()).c_str());
         //printf("Model:%s\n", glm::to_string(Model).c_str());
+        printf("Model:%s\n", glm::to_string(myWall.getMatrix()).c_str());
+        printf("Angle: %f\n", myWall.getAngle());
         // Our ModelViewProjection : multiplication of our 3 matrices
-        glm::mat4 MVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
+        glm::mat4 carMVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
+        glm::mat4 wallMVP = Projection * Car::getCamera() * glm::scale(myWall.getMatrix(), glm::vec3(5.0,5.0,5.0));
         
-        render(programID, MatrixID, &vertexbuffer, MVP);
+        glClear( GL_COLOR_BUFFER_BIT );
+        //start drawing
         
+        render(programID, MatrixID, ColorID, carbuffer, carVAO, carMVP, CAR_COLOR);
+        render(programID, MatrixID, ColorID, wallbuffer, wallVAO, wallMVP, WALL_COLOR);
+        
+        //finish drawing
+        glfwSwapBuffers(window);
+        
+        glClear( GL_COLOR_BUFFER_BIT );
         glfwPollEvents(); 
     }
     
     // Cleanup VBO and shader
-    glDeleteBuffers(1, &vertexbuffer);
+    glDeleteBuffers(1, &carbuffer);
+    glDeleteBuffers(1, &wallbuffer);
     glDeleteProgram(programID);
-    glDeleteVertexArrays(1, &VertexArrayID);
+    glDeleteVertexArrays(1, &carVAO);
+    glDeleteVertexArrays(1, &wallVAO);
     
     // Close OpenGL window and terminate GLFW
     glfwTerminate();

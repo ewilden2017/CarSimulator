@@ -1,5 +1,8 @@
 #version 330 core
 
+//color input
+uniform vec3 inColor;
+
 // Ouput data
 out vec3 color;
 
@@ -7,6 +10,6 @@ void main()
 {
 
 	// Output color = red 
-	color = vec3(1,0,0);
+	color = inColor;
 
 }
