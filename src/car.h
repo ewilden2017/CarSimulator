@@ -21,10 +21,10 @@ public:
     static void setWatch(Car* car);
     //set the camera for watching the car
     static void setCamera(glm::mat4 newCamera);
-    //returns a pointer to the camera matrix;
+    //returns the camera matrix;
     static glm::mat4 getCamera();
-    //sets the projection matrix
-    static void setProjection(glm::mat4 ProjectionMatrix);
+    //returns a pointer to the list of cars
+    static std::vector<Car*> getCarList();
     
     //returns the center postition
     void setCenter(glm::vec3 newCenter);
@@ -55,11 +55,10 @@ private:
     
     glm::mat4 modelMatrix;
     
-    static Car* carList[MAX_CARS];
+    static std::vector<Car*> carList;
     static int carCount;
     
     static glm::mat4 Camera;
-    static glm::mat4 Projection;
 };
     
 #endif

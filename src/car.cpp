@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdexcept>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,11 +14,10 @@
 #include "car.h"
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
-Car* Car::carList[MAX_CARS] = {NULL};
+std::vector<Car*> Car::carList;
 int Car::carCount = 0;
 
 glm::mat4 Car::Camera = glm::mat4(1.0f);
-glm::mat4 Car::Projection = glm::mat4(1.0f);
 
 Car::Car(glm::vec3 center, glm::vec3 forward) {
     if (Car::carCount >= MAX_CARS) {
@@ -26,7 +26,8 @@ Car::Car(glm::vec3 center, glm::vec3 forward) {
     }
     
     index = Car::carCount++;
-    Car::carList[index] = this;
+    Car::carList.push_back(this);
+    printf("size:%i\n", Car::carList.size());
     
     printf("Making car %i\n", index);
     
@@ -42,17 +43,19 @@ Car::Car(glm::vec3 center, glm::vec3 forward) {
     accelInput = 0.0f;
     
     hasCamera = false;
+    
 }
 
 Car::~Car() {
-    Car::carList[index] = NULL;
     printf("destroying car %i\n", index);
-    if (index != Car::carCount) {
-        for (int i=index+1; i < Car::carCount;i++) {
-            Car::carList[i-1] = Car::carList[i];
-            Car::carList[i] = NULL;
-        }
-    }
+    printf("size:%i\n", Car::carList.size());
+    Car::carList.erase(Car::carList.begin() + index);
+//    if (index != Car::carCount) {
+//        for (int i=index+1; i < Car::carCount;i++) {
+//            Car::carList.at(i-1) = Car::carList[i];
+//            Car::carList.at(i) = NULL;
+        //}
+//    }
     
     Car::carCount--;
 }
@@ -60,9 +63,7 @@ Car::~Car() {
 void Car::setWatch(Car* car) {
     if (car->hasCamera != true) {
         for (int i = 0;i < Car::carCount;i++) {
-            if (Car::carList[i] != NULL) {
-                Car::carList[i]->hasCamera = false;
-            }
+            Car::carList.at(i)->hasCamera = false;
         }
     
         car->hasCamera = true;
@@ -77,11 +78,17 @@ glm::mat4 Car::getCamera() {
     return Car::Camera;
 }
 
-void Car::setProjection(glm::mat4 ProjectionMatrix) {
-    Projection = ProjectionMatrix;
+std::vector<Car*> Car::getCarList() {
+    return Car::carList;
 }
 
 void Car::setCenter(glm::vec3 newCenter) { 
+    float changeX = newCenter.x - center.x;
+    float changeY = newCenter.y - center.y;
+    float changeZ = newCenter.z - center.z;
+    
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(changeX,changeY,changeZ));
+    
     center = newCenter;
 }
 
