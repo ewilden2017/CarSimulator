@@ -1,6 +1,7 @@
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdexcept>
 
 // Include GLEW
 #include <GL/glew.h>
@@ -23,6 +24,7 @@ const glm::vec3 CAR_COLOR = glm::vec3(0.0f,0.8f,0.9f);
 const glm::vec3 WALL_COLOR = glm::vec3(1.0f,0.0f,0.0f);
 
 Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+Car* cars[51] = {0};
 Wall myWall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(3.0f,10.0f,3.0f));
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -189,10 +191,6 @@ int main( void )
         
         Model *= myCar.update(deltaTime);
         
-        //printf("Camera:%s\n", glm::to_string(Car::getCamera()).c_str());
-        //printf("Model:%s\n", glm::to_string(Model).c_str());
-        printf("Model:%s\n", glm::to_string(myWall.getMatrix()).c_str());
-        printf("Angle: %f\n", myWall.getAngle());
         // Our ModelViewProjection : multiplication of our 3 matrices
         glm::mat4 carMVP = Projection * Car::getCamera() * Model; // Remember, matrix multiplication is the other way around
         glm::mat4 wallMVP = Projection * Car::getCamera() * glm::scale(myWall.getMatrix(), glm::vec3(5.0,5.0,5.0));

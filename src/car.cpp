@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdexcept>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -20,12 +21,14 @@ glm::mat4 Car::Projection = glm::mat4(1.0f);
 
 Car::Car(glm::vec3 center, glm::vec3 forward) {
     if (Car::carCount >= MAX_CARS) {
-        printf("Too many cars!");
-        //TODO: throw exception
+        printf("Too many cars!\n");
+        throw std::out_of_range("Max car limit exceeded.");
     }
     
-    index = ++Car::carCount;
+    index = Car::carCount++;
     Car::carList[index] = this;
+    
+    printf("Making car %i\n", index);
     
     forwardVector = forward;
     this->center = center;
@@ -43,7 +46,7 @@ Car::Car(glm::vec3 center, glm::vec3 forward) {
 
 Car::~Car() {
     Car::carList[index] = NULL;
-    
+    printf("destroying car %i\n", index);
     if (index != Car::carCount) {
         for (int i=index+1; i < Car::carCount;i++) {
             Car::carList[i-1] = Car::carList[i];
