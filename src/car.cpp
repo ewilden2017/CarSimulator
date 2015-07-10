@@ -30,13 +30,14 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     
     printf("Making car %i\n", index);
     
-    forwardVector = forward;
-    this->setCenter(newCenter);
-    
+    forwardVector = forward;    
     speed = 0.0f;
     acceleration = 0.0f;
     
     modelMatrix = glm::mat4(1.0f);
+    
+    center = glm::vec3(0.0f,0.0f,0.0f);
+    this->setCenter(newCenter);
     
     steering = 0.0f;
     accelInput = 0.0f;

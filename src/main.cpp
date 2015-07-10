@@ -120,9 +120,11 @@ int main( void )
     Car car2(glm::vec3(0.0f,5.0f,0.0f), glm::vec3(-1.0f,1.0f,0.0f));
     pCar = &myCar;
     std::vector<Wall> walls;
-    for (int i = 0; i < 10; i++) {
-        walls.push_back(Wall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3((float)i,10.0f,0.0f)));
-    }
+    walls.push_back(Wall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(15.0f,5.0f,0.0f)));
+    walls.push_back(Wall(glm::vec3(15.0f,5.0f,0.0f), glm::vec3(30.0f,12.5f,0.0f)));
+    walls.push_back(Wall(glm::vec3(30.0f,12.5f,0.0f), glm::vec3(35.0f,10.0f,0.0f)));
+    walls.push_back(Wall(glm::vec3(35.0f,10.0f,0.0f), glm::vec3(25.0f,6.5f,0.0f)));
+    walls.push_back(Wall(glm::vec3(25.0f,6.5f,0.0f), glm::vec3(0.0f,0.0f,0.0f)));
     
     int error = init();
     if (error != 0) {

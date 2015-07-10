@@ -26,12 +26,13 @@ Wall::Wall(glm::vec3 pointA, glm::vec3 pointB) {
     
     float distance = sqrt(pow(Bx - Ax, 2) + pow(By - Ay, 2));
     
-    //Yes, this is the intended order.
-    glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(distance,1.0f,1.0f));
+    glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(distance/2,1.0f,1.0f));
     glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(midX,midY,0.0f));
     glm::mat4 rotateMatrix = glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f,0.0f,1.0f));
-    modelMatrix = rotateMatrix * translateMatrix * scaleMatrix;
+    modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
     angle = rotation;
+    
+    printf("PointA: %s\nPointB: %s\n midX: %f midY: %f rotation: %f\n",glm::to_string(pointA).c_str(),glm::to_string(pointB).c_str(),midX,midY,rotation);
 }
 
 Wall::~Wall() {
