@@ -150,7 +150,7 @@ glm::mat4 Car::update(float deltaTime) {
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f,speed,0.0f));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
-    center = glm::vec3(modelMatrix * glm::vec4(center,1.0f));
+    center = glm::vec3(modelMatrix * glm::vec4(0.0f,0.0f,0.0f,1.0f));
     center *= SCALE_FACTOR;
     
     if (hasCamera) {

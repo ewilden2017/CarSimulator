@@ -23,7 +23,7 @@ bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, 
     
     float distanceSquared = distanceX * distanceX + distanceY * distanceY;
     
-    return distanceSquared < (radiusA + radiusB) * (radiusA + radiusB);
+    return distanceSquared < ((radiusA + radiusB) * (radiusA + radiusB));
 }
 
 bool collisionRectSAT(glm::vec3 URA, glm::vec3 LRA, glm::vec3 LLA, glm::vec3 ULA, glm::vec3 URB, glm::vec3 LRB, glm::vec3 LLB, glm::vec3 ULB) {

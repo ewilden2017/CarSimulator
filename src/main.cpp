@@ -181,8 +181,7 @@ int main( void )
     double oldTime = glfwGetTime();
     
     while(glfwWindowShouldClose(window) == 0) {
-        fputs(collisionCircleCircle(myCar.getCenter(), 1, walls.at(0).getCenter(), walls.at(0).getLength()/2) ? "true\n" : "false\n", stdout);
-        
+        collisionCircleCircle(myCar.getCenter(), 1, walls.at(0).getCenter(), walls.at(0).getLength()/2);
         
         // Measure speed
         double currentTime = glfwGetTime();

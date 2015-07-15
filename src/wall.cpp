@@ -28,9 +28,9 @@ Wall::Wall(glm::vec3 pointA, glm::vec3 pointB) {
     
     float distance = sqrt(pow(Bx - Ax, 2) + pow(By - Ay, 2));
     
-    length = distance/2;
+    length = distance;
     
-    glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(length,1.0f,1.0f));
+    glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(length/2,1.0f,1.0f));
     glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), center);
     glm::mat4 rotateMatrix = glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f,0.0f,1.0f));
     modelMatrix = translateMatrix * rotateMatrix * scaleMatrix;
