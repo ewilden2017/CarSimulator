@@ -19,6 +19,7 @@ GLFWwindow* window;
 #include "shader.hpp"
 #include "car.h"
 #include "wall.h"
+#include "collision.h"
 
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0f,0.8f,0.9f);
@@ -180,6 +181,8 @@ int main( void )
     double oldTime = glfwGetTime();
     
     while(glfwWindowShouldClose(window) == 0) {
+        fputs(collisionCircleCircle(myCar.getCenter(), 1, walls.at(0).getCenter(), walls.at(0).getLength()/2) ? "true\n" : "false\n", stdout);
+        
         
         // Measure speed
         double currentTime = glfwGetTime();
