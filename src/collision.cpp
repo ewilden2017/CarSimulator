@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include <vector>
+#include <algorithm>
 
 #include <GLFW/glfw3.h>
 
@@ -16,7 +17,6 @@
 
 #include "collision.h"
 
-
 bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, float radiusB) {
     float distanceX = centerB.x - centerA.x;
     float distanceY = centerB.y - centerB.y;
@@ -26,18 +26,71 @@ bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, 
     return distanceSquared < ((radiusA + radiusB) * (radiusA + radiusB));
 }
 
-bool collisionRectSAT(glm::vec3 URA, glm::vec3 LRA, glm::vec3 LLA, glm::vec3 ULA, glm::vec3 URB, glm::vec3 LRB, glm::vec3 LLB, glm::vec3 ULB) {
-    glm::vec3 axis1;
-    glm::vec3 axis2;
-    glm::vec3 axis3;
-    glm::vec3 axis4;
+bool collisionRectSAT(glm::vec4 URA4, glm::vec4 LRA4, glm::vec4 LLA4, glm::vec4 ULA4,
+                      glm::vec4 URB4, glm::vec4 LRB4, glm::vec4 LLB4, glm::vec4 ULB4) {
     
-    axis1.x = URA.x - ULA.x;
-    axis1.y = URA.y - ULA.y;
-    axis2.x = URA.x - LRA.x;
-    axis2.y = URA.y - LRA.y;
-    axis3.x = ULB.x - LLB.x;
-    axis3.y = ULB.y - LLB.y;
-    axis4.x = ULB.x - URB.x;
-    axis4.y = ULB.y - URB.y;
+    glm::vec3 URA(URA4);
+    glm::vec3 LRA(LRA4);
+    glm::vec3 LLA(LLA4);
+    glm::vec3 ULA(ULA4);
+    
+    glm::vec3 URB(URB4);
+    glm::vec3 LRB(LRB4);
+    glm::vec3 LLB(LLB4);
+    glm::vec3 ULB(ULB4);
+    
+    glm::vec3 axis[4];
+    
+    axis[0].x = URA.x - ULA.x;
+    axis[0].y = URA.y - ULA.y;
+    axis[1].x = URA.x - LRA.x;
+    axis[1].y = URA.y - LRA.y;
+    axis[2].x = ULB.x - LLB.x;
+    axis[2].y = ULB.y - LLB.y;
+    axis[3].x = ULB.x - URB.x;
+    axis[3].y = ULB.y - URB.y;
+    
+    glm::vec3 vertA[] = {URA, LRA, LLA, ULA};
+    glm::vec3 vertB[] = {URB, LRB, LLB, ULB};
+    
+    glm::vec3 projA[4];
+    glm::vec3 projB[4];
+    
+    std::vector<float> positionA(4);
+    std::vector<float> positionB(4);
+    for (int a = 0; a < 4; a++) {
+        for (int i = 0; i < 4; i++) {
+            float top = vertA[i].x * axis[a].x + vertA[i].y * axis[a].y;
+            float bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
+        
+            float common = top / bottom;
+        
+            projA[i].x = common * axis[a].x;
+            projA[i].y = common * axis[a].y;
+        
+            positionA.at(i) = glm::dot(projA[i], axis[a]);
+        }
+    
+        for (int i = 0; i < 4; i++) {
+            float top = vertB[i].x * axis[a].x + vertB[i].y * axis[a].y;
+            float bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
+        
+            float common = top / bottom;
+        
+            projB[i].x = common * axis[a].x;
+            projB[i].y = common * axis[a].y;
+        
+            positionB.at(i) = glm::dot(projB[i], axis[a]);
+        }
+        float minA = *(std::min_element(positionA.begin(), positionA.end()));
+        float minB = *(std::min_element(positionB.begin(), positionB.end()));
+        float maxA = *(std::max_element(positionA.begin(), positionA.end()));
+        float maxB = *(std::max_element(positionB.begin(), positionB.end()));
+    
+        //no collision on this axis, not all
+        if (((minB > maxA) || (maxB < minA))) {
+            return false;
+        }
+    }
+    return true;
 }
