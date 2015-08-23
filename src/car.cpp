@@ -128,6 +128,7 @@ glm::mat4 Car::update(float deltaTime) {
     //steering
     float steerAngle = steering * STEER_FACTOR;
     steerAngle *= speed / MAX_SPEED;
+    printf("Turning %f radians\n", steerAngle);
     forwardVector = glm::rotate(forwardVector, steerAngle, UP);
     
     //speed
