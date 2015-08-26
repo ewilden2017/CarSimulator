@@ -63,13 +63,13 @@ Car::~Car() {
     Car::carCount--;
 }
 
-void Car::setWatch(Car* car) {
-    if (car->hasCamera != true) {
+void Car::setWatch(Car& car) {
+    if (car.hasCamera != true) {
         for (int i = 0;i < Car::carCount;i++) {
             Car::carList.at(i)->hasCamera = false;
         }
     
-        car->hasCamera = true;
+        car.hasCamera = true;
     }
 }
 

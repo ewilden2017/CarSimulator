@@ -188,7 +188,8 @@ int main( void )
     int nbFrames = 0;
     
     double oldTime = glfwGetTime();
-    glm::mat4 myWallMatrix = walls.at(0).getMatrix();
+    
+    Car::setWatch(myCar);
     
     while(glfwWindowShouldClose(window) == 0) {
         //collisionCircleCircle(myCar.getCenter(), 1, walls.at(0).getCenter(), walls.at(0).getLength()/2);
@@ -216,11 +217,9 @@ int main( void )
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
         
-        glm::mat4 myMatrix;
         for(int i = 0; i < carList.size(); i++) {
             glm::mat4 model = carList.at(i)->update(deltaTime,walls);
             if (i == 0) {
-                myMatrix = model;
             }
             glm::mat4 carMatrix = Projection * Car::getCamera() * model;
             render(programID, MatrixID, ColorID, carbuffer, carVAO, carMatrix, CAR_COLOR);

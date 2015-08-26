@@ -18,7 +18,7 @@ public:
     ~Car();
     
     //updates camera to be over the car
-    static void setWatch(Car* car);
+    static void setWatch(Car& car);
     //set the camera for watching the car
     static void setCamera(glm::mat4 newCamera);
     //returns the camera matrix;
