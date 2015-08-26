@@ -148,7 +148,7 @@ glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
         speed += acceleration * deltaTime;
     }
     
-    //printf("speed: %f\n", localSpeed);
+    printf("speed: %f\n", localSpeed);
     
     glm::mat4 oldModel = modelMatrix;
     glm::vec3 oldCenter = center;

@@ -3,9 +3,9 @@
 
 //one unit is 1/50 of the screen
 const float ACCEL_FACTOR = 0.08f; //units/sec^2
-const float STEER_FACTOR = 0.05f; //radians/sec
-const float MAX_SPEED = 0.5f; //units/sec
+const float MAX_SPEED = 1.0f; //units/update
 const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
+const float STEER_FACTOR = MAX_SPEED / 5.83f; //radians/update
 
 const int MAX_CARS = 50;
 const int CAR_SCALE_FACTOR = 1;

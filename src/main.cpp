@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include <vector>
+#include <math.h>
 
 // Include GLEW
 #include <GL/glew.h>
