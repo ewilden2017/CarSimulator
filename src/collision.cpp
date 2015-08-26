@@ -103,7 +103,6 @@ bool collisionCarWall(Car& car, Wall& wall, glm::mat4 carMatrix) {
         return false;
     }
     
-    printf("Checking\n");
     glm::mat4 wallMatrix = wall.getMatrix();
     
     glm::vec4 carUR = carMatrix * glm::vec4(0.5,1.0,0.0,1.0);

@@ -35,7 +35,7 @@ public:
     void inputAccel(float accel);
     void inputSteer(float steer);
     //moves car based on deltaTime
-    glm::mat4 update(float deltaTime);
+    glm::mat4 update(float deltaTime, std::vector<Wall> walls);
     //renders the car relitive the Camera
     void render();
     

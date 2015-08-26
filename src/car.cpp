@@ -12,7 +12,10 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include "wall.h"
 #include "car.h"
+#include "collision.h"
+
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
 std::vector<Car*> Car::carList;
@@ -122,7 +125,7 @@ void Car::inputSteer(float steer) {
     this->input(accelInput, steer);
 }
 
-glm::mat4 Car::update(float deltaTime) {
+glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
     //acceleration
     acceleration = accelInput * ACCEL_FACTOR;
     
@@ -147,12 +150,25 @@ glm::mat4 Car::update(float deltaTime) {
     
     //printf("speed: %f\n", localSpeed);
     
+    glm::mat4 oldModel = modelMatrix;
+    glm::vec3 oldCenter = center;
+    
     //movement
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f,speed,0.0f));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
     center = glm::vec3(modelMatrix * glm::vec4(0.0f,0.0f,0.0f,1.0f));
     center *= CAR_SCALE_FACTOR;
+    
+    //colision
+    for (std::vector<Wall>::iterator it = walls.begin(); it != walls.end(); it++) {
+        if (collisionCarWall(*this, *it, modelMatrix)) {
+            modelMatrix = oldModel;
+            center = oldCenter;
+            speed = 0;
+            break;
+        }
+    }
     
     if (hasCamera) {
         glm::vec3 cameraCenter = center + glm::vec3(0.0f,0.0f,1.0f);

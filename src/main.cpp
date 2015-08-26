@@ -17,8 +17,8 @@ GLFWwindow* window;
 #include <glm/gtx/string_cast.hpp>
 
 #include "shader.hpp"
-#include "car.h"
 #include "wall.h"
+#include "car.h"
 #include "collision.h"
 
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
@@ -35,6 +35,15 @@ const GLfloat carData[] = {
     0.5f, 1.0f, 0.0f,
     -0.5f, 1.0f, 0.0f,
     0.5f, -1.0f, 0.0f,
+};
+
+const GLfloat wallData[] = { 
+    -1.0f, -0.2f, 0.0f,
+    1.0f, -0.2f, 0.0f,
+    -1.0f,  0.2f, 0.0f,
+    1.0f, 0.2f, 0.0f,
+    -1.0f, 0.2f, 0.0f,
+    1.0f, -0.2f, 0.0f,
 };
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -117,7 +126,7 @@ void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuff
 
 int main( void )
 {
-    Car myCar(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+    Car myCar(glm::vec3(0.0f,-5.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
     Car car2(glm::vec3(0.0f,5.0f,0.0f), glm::vec3(-1.0f,1.0f,0.0f));
     pCar = &myCar;
     std::vector<Wall> walls;
@@ -209,7 +218,7 @@ int main( void )
         
         glm::mat4 myMatrix;
         for(int i = 0; i < carList.size(); i++) {
-            glm::mat4 model = carList.at(i)->update(deltaTime);
+            glm::mat4 model = carList.at(i)->update(deltaTime,walls);
             if (i == 0) {
                 myMatrix = model;
             }
@@ -227,8 +236,6 @@ int main( void )
         
         glClear( GL_COLOR_BUFFER_BIT );
         glfwPollEvents(); 
-        
-        fputs(collisionCarWall(myCar, walls.at(0), myMatrix) ? "true\n" : "false\n", stdout);
     }
     
     // Cleanup VBO and shader
