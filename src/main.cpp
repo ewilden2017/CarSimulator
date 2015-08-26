@@ -227,10 +227,8 @@ int main( void )
         
         glClear( GL_COLOR_BUFFER_BIT );
         glfwPollEvents(); 
-        //fputs(collisionRectSAT(myMatrix * glm::vec4(glm::vec3(0.5,1.0,0.0),1.0f), myMatrix * glm::vec4(glm::vec3(0.5,-1.0,0.0),1.0f),
-        //                               myMatrix * glm::vec4(glm::vec3(-0.5,-1.0,0.0),1.0f), myMatrix * glm::vec4(glm::vec3(-0.5,1.0,0.0),1.0f),
-        //                               myWallMatrix * glm::vec4(glm::vec3(1.0f,0.2f,0.0f),1.0f), myWallMatrix * glm::vec4(glm::vec3(1.0f,-0.2f,0.0f),1.0f),
-        //                               myWallMatrix * glm::vec4(glm::vec3(-1.0f,-0.2f,0.0f),1.0f), myWallMatrix * glm::vec4(glm::vec3(-1.0f,0.2f,0.0f),1.0f)) ? "true\n" : "false\n", stdout);
+        
+        fputs(collisionCarWall(myCar, walls.at(0), myMatrix) ? "true\n" : "false\n", stdout);
     }
     
     // Cleanup VBO and shader

@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <vector>
 
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -128,7 +129,6 @@ glm::mat4 Car::update(float deltaTime) {
     //steering
     float steerAngle = steering * STEER_FACTOR;
     steerAngle *= speed / MAX_SPEED;
-    printf("Turning %f radians\n", steerAngle);
     forwardVector = glm::rotate(forwardVector, steerAngle, UP);
     
     //speed
@@ -152,7 +152,7 @@ glm::mat4 Car::update(float deltaTime) {
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
     center = glm::vec3(modelMatrix * glm::vec4(0.0f,0.0f,0.0f,1.0f));
-    center *= SCALE_FACTOR;
+    center *= CAR_SCALE_FACTOR;
     
     if (hasCamera) {
         glm::vec3 cameraCenter = center + glm::vec3(0.0f,0.0f,1.0f);

@@ -17,6 +17,8 @@
 
 #include "collision.h"
 
+const static float carRadius = 1.118 * CAR_SCALE_FACTOR; //for now, is constant
+
 bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, float radiusB) {
     float distanceX = centerB.x - centerA.x;
     float distanceY = centerB.y - centerB.y;
@@ -87,10 +89,34 @@ bool collisionRectSAT(glm::vec4 URA4, glm::vec4 LRA4, glm::vec4 LLA4, glm::vec4 
         float maxA = *(std::max_element(positionA.begin(), positionA.end()));
         float maxB = *(std::max_element(positionB.begin(), positionB.end()));
     
-        //no collision on this axis, not all
+        //no collision on this axis, none at all
         if (((minB > maxA) || (maxB < minA))) {
             return false;
         }
     }
     return true;
+}
+
+bool collisionCarWall(Car& car, Wall& wall, glm::mat4 carMatrix) {
+    //can't collide if they are too far apart
+    if (!collisionCircleCircle(car.getCenter(), carRadius, wall.getCenter(), wall.getLength()/2 + 1)) { //not very wide, and too lazy to do more percise math
+        return false;
+    }
+    
+    printf("Checking\n");
+    glm::mat4 wallMatrix = wall.getMatrix();
+    
+    glm::vec4 carUR = carMatrix * glm::vec4(0.5,1.0,0.0,1.0);
+    glm::vec4 carLR = carMatrix * glm::vec4(0.5,-1.0,0.0,1.0);
+    glm::vec4 carLL = carMatrix * glm::vec4(-0.5,-1.0,0.0,1.0);
+    glm::vec4 carUL = carMatrix * glm::vec4(-0.5,1.0,0.0,1.0);
+    
+    glm::vec4 wallUR = wallMatrix * glm::vec4(1.0,0.2,0.0,1.0);
+    glm::vec4 wallLR = wallMatrix * glm::vec4(1.0,-0.2,0.0,1.0);
+    glm::vec4 wallLL = wallMatrix * glm::vec4(-1.0,-0.2,0.0,1.0);
+    glm::vec4 wallUL = wallMatrix * glm::vec4(-1.0,0.2,0.0,1.0);
+    
+    return collisionRectSAT(carUR, carLR, carLL, carUL,
+       wallUR, wallLR, wallLL, wallUL);
+
 }

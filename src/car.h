@@ -8,7 +8,7 @@ const float MAX_SPEED = 0.5f; //units/sec
 const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
 
 const int MAX_CARS = 50;
-const int SCALE_FACTOR = 1;
+const int CAR_SCALE_FACTOR = 1;
 
 class Car {
 public:

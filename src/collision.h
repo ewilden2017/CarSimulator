@@ -8,5 +8,5 @@ bool collisionRectSAT(glm::vec4 URA, glm::vec4 LRA, glm::vec4 LLA, glm::vec4 ULA
                       glm::vec4 URB, glm::vec4 LRB, glm::vec4 LLB, glm::vec4 ULB);
 
 //Handles checks between Cars and Walls
-bool collisionCarWall(Car car, Wall wall);
+bool collisionCarWall(Car& car, Wall& wall, glm::mat4 carMatrix);
 #endif
