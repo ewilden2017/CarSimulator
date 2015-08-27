@@ -1,10 +1,11 @@
 #ifndef WALL_H
 #define WALL_H
 
+#include <glm/glm.hpp>
+
 class Wall {
 public:
     Wall(glm::vec3 pointA, glm::vec3 pointB);
-    ~Wall();
     
     float getLength();
     

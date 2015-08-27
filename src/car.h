@@ -1,8 +1,13 @@
 #ifndef CAR_H
 #define CAR_H
 
+class Wall;
+
+#include <glm/glm.hpp>
+#include <vector>
+
 //one unit is 1/50 of the screen
-const float ACCEL_FACTOR = 0.08f; //units/sec^2
+const float ACCEL_FACTOR = 0.08f; //units/update^2
 const float MAX_SPEED = 1.0f; //units/update
 const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
 const float STEER_FACTOR = MAX_SPEED / 5.83f; //radians/update

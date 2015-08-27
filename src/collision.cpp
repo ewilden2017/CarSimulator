@@ -1,12 +1,9 @@
 #include "config.h"
+#include "collision.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdexcept>
 #include <vector>
 #include <algorithm>
-
-#include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -14,8 +11,6 @@
 
 #include "wall.h"
 #include "car.h"
-
-#include "collision.h"
 
 const static float carRadius = 1.118 * CAR_SCALE_FACTOR; //for now, is constant
 

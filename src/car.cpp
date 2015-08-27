@@ -1,7 +1,7 @@
 #include "config.h"
+#include "car.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include <stdexcept>
 #include <vector>
@@ -12,9 +12,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include "wall.h"
-#include "car.h"
 #include "collision.h"
+#include "wall.h"
 
 const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
 
@@ -53,13 +52,6 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
 Car::~Car() {
     printf("destroying car %i\n", index);
     Car::carList.erase(Car::carList.begin() + index);
-//    if (index != Car::carCount) {
-//        for (int i=index+1; i < Car::carCount;i++) {
-//            Car::carList.at(i-1) = Car::carList[i];
-//            Car::carList.at(i) = NULL;
-        //}
-//    }
-    
     Car::carCount--;
 }
 
@@ -147,8 +139,6 @@ glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
     if (localSpeed < MAX_SPEED) {
         speed += acceleration * deltaTime;
     }
-    
-    printf("speed: %f\n", localSpeed);
     
     glm::mat4 oldModel = modelMatrix;
     glm::vec3 oldCenter = center;

@@ -1,5 +1,11 @@
 #ifndef COLLISION_H
 #define COLLISION_H
+
+class Car;
+class Wall;
+
+#include <glm/glm.hpp>
+
 //basic circular collision
 bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, float raduisB);
 

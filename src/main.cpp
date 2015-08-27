@@ -1,23 +1,18 @@
 // Include standard headers
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdexcept>
 #include <vector>
 #include <math.h>
 
-// Include GLEW
 #include <GL/glew.h>
 
-// Include GLFW
 #include <GLFW/glfw3.h>
 GLFWwindow* window;
 
-// Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include "shader.hpp"
+#include "shader.h"
 #include "wall.h"
 #include "car.h"
 #include "collision.h"
@@ -90,7 +85,7 @@ int init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow( 1024, 768, "Tutorial 03 - Matrices", NULL, NULL);
+    window = glfwCreateWindow( 1024, 768, "CarSimulator", NULL, NULL);
     if( window == NULL ){
         fprintf( stderr, "Failed to open GLFW window.Is your GPU OpenGL 3.3 compatable?.\n" );
         glfwTerminate();
@@ -118,7 +113,6 @@ void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuff
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
     glUniform3fv(ColorID, 1, &color[0]);
     
-    // Draw the triangle !
     glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle
     
     glBindVertexArray(0);
@@ -145,10 +139,8 @@ int main( void )
     // black background
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     
-    // Create and compile our GLSL program from the shaders
     GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" );
     
-    // Get a handle for our "MVP" uniform
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint ColorID = glGetUniformLocation(programID, "inColor");
     
@@ -183,7 +175,6 @@ int main( void )
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); 
     
-//     Car::setWatch(&myCar);
     
     double frameLastTime = glfwGetTime();
     int nbFrames = 0;
@@ -193,7 +184,6 @@ int main( void )
     Car::setWatch(myCar);
     
     while(glfwWindowShouldClose(window) == 0) {
-        //collisionCircleCircle(myCar.getCenter(), 1, walls.at(0).getCenter(), walls.at(0).getLength()/2);
         
         // Measure speed
         double currentTime = glfwGetTime();
@@ -210,10 +200,6 @@ int main( void )
         oldTime = now;
         
         std::vector<Car*> carList = Car::getCarList();
-        
-        // Our ModelViewProjection : multiplication of our 3 matrices
-        //glm::mat4 carMVP = Projection * Car::getCamera() * myCar.update(deltaTime); // Remember, matrix multiplication is the other way around
-        //glm::mat4 wallMVP = Projection * Car::getCamera() * walls.at(0).getMatrix();
         
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
@@ -250,4 +236,3 @@ int main( void )
     
     return 0;
 }
-

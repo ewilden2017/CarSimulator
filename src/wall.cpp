@@ -1,17 +1,13 @@
 #include "config.h"
+#include "wall.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-
-#include <GLFW/glfw3.h>
 
 #define GLM_FORCE_RADIANS //remember to use radians
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
-
-#include "wall.h"
 
 Wall::Wall(glm::vec3 pointA, glm::vec3 pointB) {
     float Ax = pointA.x;
@@ -37,10 +33,6 @@ Wall::Wall(glm::vec3 pointA, glm::vec3 pointB) {
     angle = rotation;
     
     printf("PointA: %s\nPointB: %s\n midX: %f midY: %f rotation: %f\n",glm::to_string(pointA).c_str(),glm::to_string(pointB).c_str(),midX,midY,rotation);
-}
-
-Wall::~Wall() {
-    //nothing yet
 }
 
 float Wall::getLength() {
