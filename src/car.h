@@ -6,11 +6,13 @@ class Wall;
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "detectLine.h"
+
 //one unit is 1/50 of the screen
-const float ACCEL_FACTOR = 0.08f; //units/update^2
-const float MAX_SPEED = 1.0f; //units/update
-const float BACK_FRICTION = 0.5f; //is multiplied by the current speed
-const float STEER_FACTOR = MAX_SPEED / 5.83f; //radians/update
+const double ACCEL_FACTOR = 0.08; //units/update^2
+const double MAX_SPEED = 1.0; //units/update
+const double BACK_FRICTION = 0.5; //is multiplied by the current speed
+const double STEER_FACTOR = MAX_SPEED / 5.83; //radians/update
 
 const int MAX_CARS = 50;
 const int CAR_SCALE_FACTOR = 1;
@@ -36,21 +38,24 @@ public:
     //sets the center position
     glm::vec3 getCenter();
     //accepts input for movement
-    void input(float accel, float steer);
-    void inputAccel(float accel);
-    void inputSteer(float steer);
+    void input(double accel, double steer);
+    void inputAccel(double accel);
+    void inputSteer(double steer);
     //moves car based on deltaTime
-    glm::mat4 update(float deltaTime, std::vector<Wall> walls);
+    void update(double deltaTime, std::vector<Wall> walls);
     //renders the car relitive the Camera
-    void render();
+    
+    glm::mat4 getMatrix();
+    
+    std::vector<DetectLine> getLineList();
     
     
 private:
-    float acceleration;
-    float speed;
+    double acceleration;
+    double speed;
     
-    float steering;
-    float accelInput;
+    double steering;
+    double accelInput;
 
     glm::vec3 forwardVector;
     glm::vec3 center;
@@ -59,6 +64,8 @@ private:
     int index;
     
     glm::mat4 modelMatrix;
+    
+    std::vector<DetectLine> lines;
     
     static std::vector<Car*> carList;
     static int carCount;

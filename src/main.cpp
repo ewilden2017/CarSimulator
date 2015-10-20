@@ -16,11 +16,13 @@ GLFWwindow* window;
 #include "wall.h"
 #include "car.h"
 #include "collision.h"
+#include "detectLine.h"
 
-const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
-const glm::vec3 CAR_COLOR = glm::vec3(0.0f,0.8f,0.9f);
-const glm::vec3 WALL_COLOR = glm::vec3(1.0f,0.0f,0.0f);
-const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0f), glm::vec3(5.0f,5.0f,5.0f));
+const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
+const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
+const glm::vec3 WALL_COLOR = glm::vec3(1.0,0.0,0.0);
+const glm::vec3 LINE_COLOR = glm::vec3(0.1,0.1,0.1);
+const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0), glm::vec3(5.0,5.0,5.0));
 
 Car* pCar = NULL;
 
@@ -40,6 +42,11 @@ const GLfloat wallData[] = {
     1.0f, 0.2f, 0.0f,
     -1.0f, 0.2f, 0.0f,
     1.0f, -0.2f, 0.0f,
+};
+
+const GLfloat lineData[] = {
+    0.0f , 1.0f, 0.0f,
+    0.0f, -1.0f, 0.0f,
 };
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -112,8 +119,22 @@ void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuff
     
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
     glUniform3fv(ColorID, 1, &color[0]);
-    
+    //TODO: Make this respect size of data
     glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle
+    
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) {
+    glUseProgram(programID);
+    
+    glBindVertexArray(VAO);
+    
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniform3fv(ColorID, 1, &color[0]);
+    
+    glDrawArrays(GL_LINES, 0 , 2);
     
     glBindVertexArray(0);
     glUseProgram(0);
@@ -121,15 +142,15 @@ void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuff
 
 int main( void )
 {
-    Car myCar(glm::vec3(0.0f,-5.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
-    Car car2(glm::vec3(0.0f,5.0f,0.0f), glm::vec3(-1.0f,1.0f,0.0f));
+    Car myCar(glm::vec3(0.0,-5.0,0.0), glm::vec3(0.0,1.0,0.0));
+    Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
     pCar = &myCar;
     std::vector<Wall> walls;
-    walls.push_back(Wall(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(15.0f,5.0f,0.0f)));
-    walls.push_back(Wall(glm::vec3(15.0f,5.0f,0.0f), glm::vec3(30.0f,12.5f,0.0f)));
-    walls.push_back(Wall(glm::vec3(30.0f,12.5f,0.0f), glm::vec3(35.0f,10.0f,0.0f)));
-    walls.push_back(Wall(glm::vec3(35.0f,10.0f,0.0f), glm::vec3(25.0f,6.5f,0.0f)));
-    walls.push_back(Wall(glm::vec3(25.0f,6.5f,0.0f), glm::vec3(0.0f,0.0f,0.0f)));
+    walls.push_back(Wall(glm::vec3(0.0,0.0,0.0), glm::vec3(15.0,5.0,0.0)));
+    walls.push_back(Wall(glm::vec3(15.0,5.0,0.0), glm::vec3(30.0,12.5,0.0)));
+    walls.push_back(Wall(glm::vec3(30.0,12.5,0.0), glm::vec3(35.0,10.0,0.0)));
+    walls.push_back(Wall(glm::vec3(35.0,10.0,0.0), glm::vec3(25.0,6.5,0.0)));
+    walls.push_back(Wall(glm::vec3(25.0,6.5,0.0), glm::vec3(0.0,0.0,0.0)));
     
     int error = init();
     if (error != 0) {
@@ -137,17 +158,20 @@ int main( void )
     }
     
     // black background
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     
     GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" );
     
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
     GLuint ColorID = glGetUniformLocation(programID, "inColor");
     
-    glm::mat4 Projection = glm::ortho(-50.0f,50.0f,-50.0f,50.0f,0.0f,100.0f); // In world coordinates
+    glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,100.0); // In world coordinates
     glm::mat4 View = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
     
-    Car::setCamera(View);    
+    Car::setCamera(View);
+    
+    
+    //WARNING: I don't actually understand vertex arrays
     
     GLuint carbuffer;
     GLuint carVAO;
@@ -175,6 +199,20 @@ int main( void )
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); 
     
+    GLuint linebuffer;
+    GLuint lineVAO;
+    
+    glGenBuffers(1, &linebuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, linebuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
+    
+    glGenVertexArrays(1, &lineVAO);
+    glBindVertexArray(lineVAO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
     
     double frameLastTime = glfwGetTime();
     int nbFrames = 0;
@@ -204,12 +242,17 @@ int main( void )
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
         
-        for(int i = 0; i < carList.size(); i++) {
-            glm::mat4 model = carList.at(i)->update(deltaTime,walls);
-            if (i == 0) {
-            }
-            glm::mat4 carMatrix = Projection * Car::getCamera() * model;
+        for(std::vector<Car*>::iterator it = carList.begin(); it != carList.end(); it++) {
+            (*it)->update(deltaTime,walls);            
+           
+            
+            glm::mat4 carMatrix = Projection * Car::getCamera() * (*it)->getMatrix();
             render(programID, MatrixID, ColorID, carbuffer, carVAO, carMatrix, CAR_COLOR);
+            
+            std::vector<DetectLine> lines = (*it)->getLineList();
+            for (std::vector<DetectLine>::iterator lIt = lines.begin(); lIt != lines.end(); lIt++) {
+                renderLine(programID, MatrixID, ColorID, linebuffer, lineVAO, Projection * Car::getCamera() * lIt->getMatrix(), LINE_COLOR);
+            }
         }
         
         for(int i = 0; i < walls.size(); i++) {
@@ -227,9 +270,11 @@ int main( void )
     // Cleanup VBO and shader
     glDeleteBuffers(1, &carbuffer);
     glDeleteBuffers(1, &wallbuffer);
+    glDeleteBuffers(1, &linebuffer);
     glDeleteProgram(programID);
     glDeleteVertexArrays(1, &carVAO);
     glDeleteVertexArrays(1, &wallVAO);
+    glDeleteVertexArrays(1, &lineVAO);
     
     // Close OpenGL window and terminate GLFW
     glfwTerminate();

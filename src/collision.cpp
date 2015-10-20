@@ -12,19 +12,23 @@
 #include "wall.h"
 #include "car.h"
 
-const static float carRadius = 1.118 * CAR_SCALE_FACTOR; //for now, is constant
+const static double carRadius = 1.118 * CAR_SCALE_FACTOR; //for now, is constant
 
-bool collisionCircleCircle(glm::vec3 centerA, float radiusA, glm::vec3 centerB, float radiusB) {
-    float distanceX = centerB.x - centerA.x;
-    float distanceY = centerB.y - centerB.y;
+double perpDot(const glm::vec3& a, const glm::vec3& b) {
+    return (a.y*b.x) - (a.x*b.y);
+}
+
+bool collisionCircleCircle(glm::vec3 centerA, double radiusA, glm::vec3 centerB, double radiusB) {
+    double distanceX = centerB.x - centerA.x;
+    double distanceY = centerB.y - centerB.y;
     
-    float distanceSquared = distanceX * distanceX + distanceY * distanceY;
+    double distanceSquared = distanceX * distanceX + distanceY * distanceY;
     
     return distanceSquared < ((radiusA + radiusB) * (radiusA + radiusB));
 }
 
-bool collisionRectSAT(glm::vec4 URA4, glm::vec4 LRA4, glm::vec4 LLA4, glm::vec4 ULA4,
-                      glm::vec4 URB4, glm::vec4 LRB4, glm::vec4 LLB4, glm::vec4 ULB4) {
+bool collisionRectSAT(glm::vec4& URA4, glm::vec4& LRA4, glm::vec4& LLA4, glm::vec4& ULA4,
+                      glm::vec4& URB4, glm::vec4& LRB4, glm::vec4& LLB4, glm::vec4& ULB4) {
     
     glm::vec3 URA(URA4);
     glm::vec3 LRA(LRA4);
@@ -53,14 +57,14 @@ bool collisionRectSAT(glm::vec4 URA4, glm::vec4 LRA4, glm::vec4 LLA4, glm::vec4 
     glm::vec3 projA[4];
     glm::vec3 projB[4];
     
-    std::vector<float> positionA(4);
-    std::vector<float> positionB(4);
+    std::vector<double> positionA(4);
+    std::vector<double> positionB(4);
     for (int a = 0; a < 4; a++) {
         for (int i = 0; i < 4; i++) {
-            float top = vertA[i].x * axis[a].x + vertA[i].y * axis[a].y;
-            float bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
+            double top = vertA[i].x * axis[a].x + vertA[i].y * axis[a].y;
+            double bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
         
-            float common = top / bottom;
+            double common = top / bottom;
         
             projA[i].x = common * axis[a].x;
             projA[i].y = common * axis[a].y;
@@ -69,20 +73,20 @@ bool collisionRectSAT(glm::vec4 URA4, glm::vec4 LRA4, glm::vec4 LLA4, glm::vec4 
         }
     
         for (int i = 0; i < 4; i++) {
-            float top = vertB[i].x * axis[a].x + vertB[i].y * axis[a].y;
-            float bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
+            double top = vertB[i].x * axis[a].x + vertB[i].y * axis[a].y;
+            double bottom = axis[a].x * axis[a].x + axis[a].y * axis[a].y;
         
-            float common = top / bottom;
+            double common = top / bottom;
         
             projB[i].x = common * axis[a].x;
             projB[i].y = common * axis[a].y;
         
             positionB.at(i) = glm::dot(projB[i], axis[a]);
         }
-        float minA = *(std::min_element(positionA.begin(), positionA.end()));
-        float minB = *(std::min_element(positionB.begin(), positionB.end()));
-        float maxA = *(std::max_element(positionA.begin(), positionA.end()));
-        float maxB = *(std::max_element(positionB.begin(), positionB.end()));
+        double minA = *(std::min_element(positionA.begin(), positionA.end()));
+        double minB = *(std::min_element(positionB.begin(), positionB.end()));
+        double maxA = *(std::max_element(positionA.begin(), positionA.end()));
+        double maxB = *(std::max_element(positionB.begin(), positionB.end()));
     
         //no collision on this axis, none at all
         if (((minB > maxA) || (maxB < minA))) {
@@ -113,4 +117,37 @@ bool collisionCarWall(Car& car, Wall& wall, glm::mat4 carMatrix) {
     return collisionRectSAT(carUR, carLR, carLL, carUL,
        wallUR, wallLR, wallLL, wallUL);
 
+}
+
+bool collisionLineLine(const glm::vec3& A1, const glm::vec3& A2, const glm::vec3& B1, const glm::vec3& B2, double* out = 0) {
+    glm::vec3 a = A2 - A1;
+    glm::vec3 b = B2 - B1;
+    
+    double f = perpDot(a,b);
+    if (f == 0) {
+        return false;
+    }
+    
+    glm::vec3 c = B2 - A2;
+    double aa = perpDot(a,c);
+    double bb = perpDot(b,c);
+    
+    if(f < 0)
+    {
+        if(aa > 0)     return false;
+        if(bb > 0)     return false;
+        if(aa < f)     return false;
+        if(bb < f)     return false;
+    }
+    else
+    {
+        if(aa < 0)     return false;
+        if(bb < 0)     return false;
+        if(aa > f)     return false;
+        if(bb > f)     return false;
+    }
+
+    if(out)
+        *out = 1.0 - (bb / f);
+    return true;
 }

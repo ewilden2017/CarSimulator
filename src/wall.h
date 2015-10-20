@@ -7,20 +7,20 @@ class Wall {
 public:
     Wall(glm::vec3 pointA, glm::vec3 pointB);
     
-    float getLength();
+    double getLength();
     
     glm::vec3* getVerticies();
     glm::mat4 getMatrix();
     glm::vec3 getCenter();
-    float getAngle();
+    double getAngle();
 
 private:
     glm::vec3 pointA;
     glm::vec3 pointB;
-    float angle;
+    double angle;
     
     glm::vec3 center;
-    float length;
+    double length;
     
     glm::vec3 Verticies[4];
     

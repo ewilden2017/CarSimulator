@@ -14,13 +14,14 @@
 
 #include "collision.h"
 #include "wall.h"
+#include "detectLine.h"
 
-const glm::vec3 UP = glm::vec3(0.0f,0.0f,1.0f);
+const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 
 std::vector<Car*> Car::carList;
 int Car::carCount = 0;
 
-glm::mat4 Car::Camera = glm::mat4(1.0f);
+glm::mat4 Car::Camera = glm::mat4(1.0);
 
 Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     if (Car::carCount >= MAX_CARS) {
@@ -34,18 +35,22 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     printf("Making car %i\n", index);
     
     forwardVector = forward;    
-    speed = 0.0f;
-    acceleration = 0.0f;
+    speed = 0.0;
+    acceleration = 0.0;
     
-    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::mat4(1.0);
     
-    center = glm::vec3(0.0f,0.0f,0.0f);
+    center = glm::vec3(0.0,0.0,0.0);
     this->setCenter(newCenter);
     
-    steering = 0.0f;
-    accelInput = 0.0f;
+    steering = 0.0;
+    accelInput = 0.0;
     
     hasCamera = false;
+    
+    for(double i = LINE_START; i <= LINE_END; i += (LINE_END - LINE_START)/LINE_COUNT) {
+        lines.push_back(DetectLine(center, 0.0, i, 5.0));
+    }
     
 }
 
@@ -78,9 +83,9 @@ std::vector<Car*> Car::getCarList() {
 }
 
 void Car::setCenter(glm::vec3 newCenter) { 
-    float changeX = newCenter.x - center.x;
-    float changeY = newCenter.y - center.y;
-    float changeZ = newCenter.z - center.z;
+    double changeX = newCenter.x - center.x;
+    double changeY = newCenter.y - center.y;
+    double changeZ = newCenter.z - center.z;
     
     modelMatrix = glm::translate(modelMatrix, glm::vec3(changeX,changeY,changeZ));
     
@@ -91,33 +96,33 @@ glm::vec3 Car::getCenter() {
     return center;
 }
 
-void Car::input(float accel, float steer) {
-    if (accel > 1.0f) {
-        accelInput = 1.0f;
-    } else if (accel < -1.0f) {
-        accelInput = -1.0f;
+void Car::input(double accel, double steer) {
+    if (accel > 1.0) {
+        accelInput = 1.0;
+    } else if (accel < -1.0) {
+        accelInput = -1.0;
     } else {
         accelInput = accel;
     }
     
-    if (steer > 1.0f) {
-        steering = 1.0f;
-    } else if (steer < -1.0f) {
-        steering = -1.0f;
+    if (steer > 1.0) {
+        steering = 1.0;
+    } else if (steer < -1.0) {
+        steering = -1.0;
     } else {
         steering = steer;
     }
 }
 
-void Car::inputAccel(float accel) {
+void Car::inputAccel(double accel) {
     this->input(accel, steering);
 }
 
-void Car::inputSteer(float steer) {
+void Car::inputSteer(double steer) {
     this->input(accelInput, steer);
 }
 
-glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
+void Car::update(double deltaTime, std::vector<Wall> walls) {
     //acceleration
     acceleration = accelInput * ACCEL_FACTOR;
     
@@ -127,11 +132,11 @@ glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
     forwardVector = glm::rotate(forwardVector, steerAngle, UP);
     
     //speed
-    float localSpeed = (float)fabs(speed);
+    double localSpeed = fabs(speed);
 
-    float backAccel = -speed * BACK_FRICTION;
-    if (localSpeed < 0.05f) {
-        backAccel *= 100.0f;
+    double backAccel = -speed * BACK_FRICTION;
+    if (localSpeed < 0.05) {
+        backAccel *= 100.0;
     }
 
     speed += (fabs(backAccel) > localSpeed ? -speed : backAccel) * deltaTime;
@@ -144,26 +149,41 @@ glm::mat4 Car::update(float deltaTime, std::vector<Wall> walls) {
     glm::vec3 oldCenter = center;
     
     //movement
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f,speed,0.0f));
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0,speed,0.0));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
-    center = glm::vec3(modelMatrix * glm::vec4(0.0f,0.0f,0.0f,1.0f));
+    center = glm::vec3(modelMatrix * glm::vec4(0.0,0.0,0.0,1.0));
     center *= CAR_SCALE_FACTOR;
     
     //colision
+    bool collided = false;
     for (std::vector<Wall>::iterator it = walls.begin(); it != walls.end(); it++) {
         if (collisionCarWall(*this, *it, modelMatrix)) {
             modelMatrix = oldModel;
             center = oldCenter;
             speed = 0;
+            collided = true;
             break;
         }
     }
     
-    if (hasCamera) {
-        glm::vec3 cameraCenter = center + glm::vec3(0.0f,0.0f,1.0f);
-        Car::Camera = glm::lookAt(cameraCenter, center, glm::vec3(0.0f,1.0f,0.0f));
+    if (!collided) {
+        for (std::vector<DetectLine>::iterator it = lines.begin(); it != lines.end(); it++) {
+            it->setCenter(center);
+            it->setAngle(steerAngle + it->getAngle());
+        }
     }
+    
+    if (hasCamera) {
+        glm::vec3 cameraCenter = center + glm::vec3(0.0,0.0,1.0);
+        Car::Camera = glm::lookAt(cameraCenter, center, glm::vec3(0.0,1.0,0.0));
+    }
+}
 
+glm::mat4 Car::getMatrix() {
     return modelMatrix;
+}
+
+std::vector<DetectLine> Car::getLineList() {
+    return lines;
 }
