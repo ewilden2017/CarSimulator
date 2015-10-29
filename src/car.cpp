@@ -47,9 +47,16 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     accelInput = 0.0;
     
     hasCamera = false;
-    
-    for(double i = LINE_START; i <= LINE_END; i += (LINE_END - LINE_START)/LINE_COUNT) {
-        lines.push_back(DetectLine(center, 0.0, i, 5.0));
+
+    if (LINE_COUNT == 1) {
+        lines.push_back(DetectLine(center, 0.0, (LINE_START + LINE_END)/2, 10.0));
+    } else {    
+    	double increment = (LINE_END - LINE_START) / (LINE_COUNT - 1);
+    	for(int i = 0; i < LINE_COUNT; i++) {
+            double k = LINE_START + (increment * i);
+        
+            lines.push_back(DetectLine(center, 0.0, k, 10.0));
+        }
     }
     
 }

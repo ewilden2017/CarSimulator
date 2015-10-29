@@ -120,6 +120,7 @@ bool collisionCarWall(Car& car, Wall& wall, glm::mat4 carMatrix) {
 }
 
 bool collisionLineLine(const glm::vec3& A1, const glm::vec3& A2, const glm::vec3& B1, const glm::vec3& B2, double* out = 0) {
+
     glm::vec3 a = A2 - A1;
     glm::vec3 b = B2 - B1;
     

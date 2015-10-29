@@ -7,7 +7,7 @@ const double PI = 3.14159265354;
 
 const double LINE_START = -PI / 4;
 const double LINE_END = PI / 4;
-const int LINE_COUNT = 8; //TODO: fix. for now, zero indexed.
+const int LINE_COUNT = 9;
 
 class DetectLine {
 public:
@@ -26,6 +26,9 @@ public:
     
     glm::vec3 getEnd();
     
+    double getDistance();
+    void setDistance(double newDistance);
+    
 private:
     glm::vec3 center;
     
@@ -36,6 +39,8 @@ private:
     double angle;
     double offset;
     double length;
+    
+    double distance;
 };
     
 #endif
