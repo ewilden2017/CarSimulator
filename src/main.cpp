@@ -46,7 +46,7 @@ const GLfloat wallData[] = {
 
 const GLfloat lineData[] = {
     0.0f , 1.0f, 0.0f,
-    0.0f, -1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
 };
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -143,7 +143,7 @@ void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertex
 int main( void )
 {
     Car myCar(glm::vec3(0.0,-5.0,0.0), glm::vec3(0.0,1.0,0.0));
-    Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
+    //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
     pCar = &myCar;
     std::vector<Wall> walls;
     walls.push_back(Wall(glm::vec3(0.0,0.0,0.0), glm::vec3(15.0,5.0,0.0)));
@@ -252,6 +252,24 @@ int main( void )
             std::vector<DetectLine> lines = (*it)->getLineList();
             for (std::vector<DetectLine>::iterator lIt = lines.begin(); lIt != lines.end(); lIt++) {
                 renderLine(programID, MatrixID, ColorID, linebuffer, lineVAO, Projection * Car::getCamera() * lIt->getMatrix(), LINE_COLOR);
+                
+                double closest = -1;
+                for (std::vector<Wall>::iterator wIt = walls.begin(); wIt != walls.end(); wIt++) {
+                    glm::mat4 wallMatrix = wIt->getMatrix();
+                    glm::vec3 wallB = glm::vec3(wallMatrix * glm::vec4(1.0,0.0,0.0,1.0));
+                    glm::vec3 wallA = glm::vec3(wallMatrix * glm::vec4(-1.0,0.0,0.0,1.0));
+                    //printf("A:%s, B:%s\n", glm::to_string(wallA).c_str(), glm::to_string(wallB).c_str());
+                    double *out;
+                    if (collisionLineLine(lIt->getCenter(), lIt->getEnd(), wallA , wallB, out) == true) {
+                        printf("Hello!\n");
+                    }
+                    if (closest < 0 || *out < closest) {
+                        closest = *out;
+                    }
+                }
+                
+                lIt->setDistance(closest);
+                //printf("Distance:%f\n", closest);
             }
         }
         
