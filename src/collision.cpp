@@ -148,7 +148,10 @@ bool collisionLineLine(const glm::vec3& A1, const glm::vec3& A2, const glm::vec3
         if(bb > f)     return false;
     }
 
-    if(out)
+    if(out) {
+        printf("aldfasdfs\n");
+    
         *out = 1.0 - (bb / f);
+    }
     return true;
 }
