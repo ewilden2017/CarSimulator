@@ -259,7 +259,6 @@ int main( void )
                     glm::vec3 wallB = glm::vec3(wallMatrix * glm::vec4(1.0,0.0,0.0,1.0));
                     glm::vec3 wallA = glm::vec3(wallMatrix * glm::vec4(-1.0,0.0,0.0,1.0));
                     //printf("A:%s, B:%s\n", glm::to_string(wallA).c_str(), glm::to_string(wallB).c_str());
-<<<<<<< HEAD
                     double out = 0;
                     if (collisionLineLine(lIt->getCenter(), lIt->getEnd(), wallA , wallB, &out) == true) {
                         if (closest == -1 || out < closest) {
@@ -268,19 +267,8 @@ int main( void )
                     }
                 }
                 printf("Closest:%f\n",closest);
-=======
-                    double *out;
-                    if (collisionLineLine(lIt->getCenter(), lIt->getEnd(), wallA , wallB, out) == true) {
-                        printf("Hello!\n");
-                    }
-                    if (closest < 0 || *out < closest) {
-                        closest = *out;
-                    }
-                }
                 
->>>>>>> b78d6fc1e7f1489da45cc750380a380b41abd915
                 lIt->setDistance(closest);
-                //printf("Distance:%f\n", closest);
             }
         }
         
