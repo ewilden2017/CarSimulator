@@ -17,6 +17,7 @@ GLFWwindow* window;
 #include "car.h"
 #include "collision.h"
 #include "detectLine.h"
+#include "wallLoader.h"
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
@@ -142,16 +143,17 @@ void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertex
 
 int main( void )
 {
+    std::vector<Wall> walls = loadWalls("Walls.txt");
     Car myCar(glm::vec3(0.0,-5.0,0.0), glm::vec3(0.0,1.0,0.0));
     //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
     pCar = &myCar;
-    std::vector<Wall> walls;
+ /*   std::vector<Wall> walls;
     walls.push_back(Wall(glm::vec3(0.0,0.0,0.0), glm::vec3(15.0,5.0,0.0)));
     walls.push_back(Wall(glm::vec3(15.0,5.0,0.0), glm::vec3(30.0,12.5,0.0)));
     walls.push_back(Wall(glm::vec3(30.0,12.5,0.0), glm::vec3(35.0,10.0,0.0)));
     walls.push_back(Wall(glm::vec3(35.0,10.0,0.0), glm::vec3(25.0,6.5,0.0)));
     walls.push_back(Wall(glm::vec3(25.0,6.5,0.0), glm::vec3(0.0,0.0,0.0)));
-    
+*/    
     int error = init();
     if (error != 0) {
         return error;

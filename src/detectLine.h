@@ -7,7 +7,7 @@ const double PI = 3.14159265354;
 
 const double LINE_START = -PI / 4;
 const double LINE_END = PI / 4;
-const int LINE_COUNT = 1;
+const int LINE_COUNT = 9;
 
 class DetectLine {
 public:
