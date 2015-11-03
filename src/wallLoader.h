@@ -2,9 +2,11 @@
 #define WALL_LOADER_H
 
 #include <vector>
+#include "wall.h"
+#include <glm/glm.hpp>
 
-class Wall;
+const double WALL_DISTANCE = 5.0;
 
-std::vector<Wall> loadWalls(const char* filename);
+std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls);
 
 #endif

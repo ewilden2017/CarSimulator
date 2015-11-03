@@ -143,8 +143,10 @@ void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertex
 
 int main( void )
 {
-    std::vector<Wall> walls = loadWalls("Walls.txt");
-    Car myCar(glm::vec3(0.0,-5.0,0.0), glm::vec3(0.0,1.0,0.0));
+    std::vector<Wall> walls;
+    std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls);
+    
+    Car myCar(path.front(), glm::normalize(path.at(1) - path.front()));
     //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
     pCar = &myCar;
  /*   std::vector<Wall> walls;

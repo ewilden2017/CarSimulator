@@ -8,6 +8,8 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include "common.h"
+
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 
 DetectLine::DetectLine(glm::vec3 newCenter, double newAngle, double newOffset, double newLength) {

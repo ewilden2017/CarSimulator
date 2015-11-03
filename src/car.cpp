@@ -38,7 +38,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     speed = 0.0;
     acceleration = 0.0;
     
-    modelMatrix = glm::mat4(1.0);
+    modelMatrix = glm::rotate(glm::mat4(1.0), (float)(atan2(forwardVector.y, forwardVector.x) - PI/2), UP); //Model is already rotated a quarter revolution
     
     center = glm::vec3(0.0,0.0,0.0);
     this->setCenter(newCenter);
@@ -47,15 +47,17 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     accelInput = 0.0;
     
     hasCamera = false;
+    
+    double angle = atan2(forwardVector.y, forwardVector.x) - PI/2;
 
     if (LINE_COUNT == 1) {
-        lines.push_back(DetectLine(center, 0.0, (LINE_START + LINE_END)/2, 10.0));
+        lines.push_back(DetectLine(center, angle, (LINE_START + LINE_END)/2, 10.0));
     } else {    
     	double increment = (LINE_END - LINE_START) / (LINE_COUNT - 1);
     	for(int i = 0; i < LINE_COUNT; i++) {
             double k = LINE_START + (increment * i);
         
-            lines.push_back(DetectLine(center, 0.0, k, 10.0));
+            lines.push_back(DetectLine(center, angle, k, 10.0));
         }
     }
     

@@ -2,8 +2,7 @@
 #define DETECTLINE_H
 
 #include <glm/glm.hpp>
-
-const double PI = 3.14159265354;
+#include "common.h"
 
 const double LINE_START = -PI / 4;
 const double LINE_END = PI / 4;

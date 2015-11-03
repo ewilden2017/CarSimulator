@@ -149,7 +149,7 @@ bool collisionLineLine(const glm::vec3& A1, const glm::vec3& A2, const glm::vec3
     }
 
     if(out) {
-        printf("aldfasdfs\n");
+        //printf("aldfasdfs\n");
     
         *out = 1.0 - (bb / f);
     }
