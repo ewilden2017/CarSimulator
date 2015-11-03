@@ -65,18 +65,42 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
     glm::vec3 firstPoint = path.front();
     glm::vec3 secondPoint = path.at(1);
     
+    glm::vec3 almostLastPoint = path.at(path.size() - 2); //2 for 0-indexed
+    glm::vec3 finalPoint = path.back();
+    
     double firstAngle = PI;
-    if ( secondPoint.x != firstPoint.x) {
+    if (secondPoint.x != firstPoint.x) {
         firstAngle = atan2((secondPoint.y - firstPoint.y), (secondPoint.x - firstPoint.x));
     }
     
-    glm::vec3 lastIntersectUp;
-    lastIntersectUp.x = WALL_DISTANCE * cos(firstAngle + PI/2) + firstPoint.x;
-    lastIntersectUp.y = WALL_DISTANCE * sin(firstAngle + PI/2) + firstPoint.y;
+    double finalAngle = PI;
+    if ( secondPoint.x != firstPoint.x) {
+        finalAngle = atan2((finalPoint.y - almostLastPoint.y), (finalPoint.x - almostLastPoint.x));
+    }
     
+    double loopIntersectLength = WALL_DISTANCE;
+    
+    glm::vec3 lastIntersectUp;
     glm::vec3 lastIntersectDown;
-    lastIntersectDown.x = WALL_DISTANCE * cos(firstAngle - PI/2) + firstPoint.x;
-    lastIntersectDown.y = WALL_DISTANCE * sin(firstAngle - PI/2) + firstPoint.y;
+    //create a closed loop
+    if (firstPoint == path.back()) {
+        
+        if (abs(finalAngle - firstAngle) != PI) {
+            loopIntersectLength = WALL_DISTANCE / cos((firstAngle - finalAngle) / 2);
+        }
+        
+        lastIntersectUp.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) + PI/2) + firstPoint.x;
+        lastIntersectUp.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) + PI/2) + firstPoint.y;
+        
+        lastIntersectDown.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) - PI/2) + firstPoint.x;
+        lastIntersectDown.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) - PI/2) + firstPoint.y;
+    } else {
+        lastIntersectUp.x = WALL_DISTANCE * cos(firstAngle + PI/2) + firstPoint.x;
+        lastIntersectUp.y = WALL_DISTANCE * sin(firstAngle + PI/2) + firstPoint.y;
+    
+        lastIntersectDown.x = WALL_DISTANCE * cos(firstAngle - PI/2) + firstPoint.x;
+        lastIntersectDown.y = WALL_DISTANCE * sin(firstAngle - PI/2) + firstPoint.y;
+    }
     
     for (std::vector<glm::vec3>::iterator it = path.begin() + 1; it != path.end() - 1; it++) {
         
@@ -125,25 +149,22 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
         lastIntersectDown = intersectDown;
     }
     
-    //add final segment
-    
-    glm::vec3 prevPoint = path.at(path.size() - 2); //2 for 0-indexed
-    glm::vec3 finalPoint = path.back();
-    
-    double finalAngle = PI;
-    if ( secondPoint.x != firstPoint.x) {
-        finalAngle = atan2((finalPoint.y - prevPoint.y), (finalPoint.x - prevPoint.x));
-    }
-    
-    printf("Angle: %f\n", finalAngle);
-    
     glm::vec3 finalIntersectUp;
-    finalIntersectUp.x = WALL_DISTANCE * cos(finalAngle + PI/2) + finalPoint.x;
-    finalIntersectUp.y = WALL_DISTANCE * sin(finalAngle + PI/2) + finalPoint.y;
-    
     glm::vec3 finalIntersectDown;
-    finalIntersectDown.x = WALL_DISTANCE * cos(finalAngle - PI/2) + finalPoint.x;
-    finalIntersectDown.y = WALL_DISTANCE * sin(finalAngle - PI/2) + finalPoint.y;
+    
+    if (firstPoint == path.back()) {
+        finalIntersectUp.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) + PI/2) + finalPoint.x;
+        finalIntersectUp.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) + PI/2) + finalPoint.y;
+        
+        finalIntersectDown.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) - PI/2) + finalPoint.x;
+        finalIntersectDown.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) - PI/2) + finalPoint.y;
+    } else {
+        finalIntersectUp.x = WALL_DISTANCE * cos(finalAngle + PI/2) + finalPoint.x;
+        finalIntersectUp.y = WALL_DISTANCE * sin(finalAngle + PI/2) + finalPoint.y;
+        
+        finalIntersectDown.x = WALL_DISTANCE * cos(finalAngle - PI/2) + finalPoint.x;
+        finalIntersectDown.y = WALL_DISTANCE * sin(finalAngle - PI/2) + finalPoint.y;
+    }
     
     walls->push_back(Wall(lastIntersectUp, finalIntersectUp));
     walls->push_back(Wall(lastIntersectDown, finalIntersectDown));
