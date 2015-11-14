@@ -146,11 +146,16 @@ int main( void )
     std::vector<Wall> walls;
     std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls);
     
+    if (path.size() < 2 ) {
+        printf("At least two points required. Quiting.\n");
+        return -1;
+    }
+    
     glm::vec3 rotation;
-    if (path.size() > 1 && path.front() != path.at(1)) {
+    if (path.front() != path.at(1)) {
         rotation = glm::normalize(path.at(1) - path.front());
     } else {
-        rotation = glm::vec3(0.0,1.0,0.0);
+        rotation = glm::vec3(0.0,0.0,0.0);
     }
     
     Car myCar(path.front(), rotation);
@@ -187,7 +192,7 @@ int main( void )
     GLuint carbuffer;
     GLuint carVAO;
     
-    glGenBuffers(1, &carbuffer);
+    glGenBuffers(1, &carbuffer);rotation = glm::vec3(0.0,1.0,0.0);
     glBindBuffer(GL_ARRAY_BUFFER, carbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(carData), carData, GL_STATIC_DRAW);
     
@@ -206,7 +211,6 @@ int main( void )
     glBindVertexArray(wallVAO);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); 
     
@@ -218,7 +222,7 @@ int main( void )
     glBufferData(GL_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
     
     glGenVertexArrays(1, &lineVAO);
-    glBindVertexArray(lineVAO);
+    glBindVertexArray(lineVAO);rotation = glm::vec3(0.0,1.0,0.0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     
@@ -231,6 +235,9 @@ int main( void )
     double oldTime = glfwGetTime();
     
     Car::setWatch(myCar);
+
+    int currentPoint = 0;
+    int nextPoint = 1;
     
     while(glfwWindowShouldClose(window) == 0) {
         
@@ -247,6 +254,17 @@ int main( void )
         double now = glfwGetTime();
         double deltaTime = now - oldTime;
         oldTime = now;
+        
+        //test position
+        double dotCurrent = glm::dot(myCar.getCenter(), path.at(currentPoint));
+        printf("Next: %i (%f)\n", nextPoint, dotCurrent);
+        if(abs(dotCurrent) < WALL_DISTANCE) {
+            currentPoint = nextPoint;
+            nextPoint++;
+            if (nextPoint > path.size() - 1) {
+                nextPoint = 0;
+            }
+        }
         
         std::vector<Car*> carList = Car::getCarList();
         

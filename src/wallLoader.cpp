@@ -98,6 +98,7 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
         
         lastIntersectDown.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) - PI/2) + firstPoint.x;
         lastIntersectDown.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) - PI/2) + firstPoint.y;
+        
     } else {
         lastIntersectUp.x = WALL_DISTANCE * cos(firstAngle + PI/2) + firstPoint.x;
         lastIntersectUp.y = WALL_DISTANCE * sin(firstAngle + PI/2) + firstPoint.y;
@@ -177,5 +178,9 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
     walls->push_back(Wall(lastIntersectUp, finalIntersectUp));
     walls->push_back(Wall(lastIntersectDown, finalIntersectDown));
     
+    if (path.front() == path.back()) {
+        //remove the last point if loop, as they are identical
+        path.erase(path.end());
+    }
     return path;
 }

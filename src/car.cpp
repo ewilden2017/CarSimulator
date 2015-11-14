@@ -37,11 +37,14 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     forwardVector = forward;    
     speed = 0.0;
     acceleration = 0.0;
-    
-    modelMatrix = glm::rotate(glm::mat4(1.0), (float)(atan2(forwardVector.y, forwardVector.x) - PI/2), UP); //Model is already rotated a quarter revolution
+        
+    modelMatrix = glm::mat4(1.0);
     
     center = glm::vec3(0.0,0.0,0.0);
     this->setCenter(newCenter);
+    
+    modelMatrix = glm::rotate(modelMatrix, (float)(atan2(forwardVector.y, forwardVector.x) - PI/2), UP); //Model is already rotated a quarter revolution
+
     
     steering = 0.0;
     accelInput = 0.0;
@@ -92,11 +95,9 @@ std::vector<Car*> Car::getCarList() {
 }
 
 void Car::setCenter(glm::vec3 newCenter) { 
-    double changeX = newCenter.x - center.x;
-    double changeY = newCenter.y - center.y;
-    double changeZ = newCenter.z - center.z;
+    glm::vec3 change = newCenter - center;
     
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(changeX,changeY,changeZ));
+    modelMatrix = glm::translate(modelMatrix, change);
     
     center = newCenter;
 }
@@ -161,8 +162,9 @@ void Car::update(double deltaTime, std::vector<Wall> walls) {
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0,speed,0.0));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
+    
     center = glm::vec3(modelMatrix * glm::vec4(0.0,0.0,0.0,1.0));
-    center *= CAR_SCALE_FACTOR;
+    //center *= CAR_SCALE_FACTOR;
     
     //colision
     bool collided = false;
