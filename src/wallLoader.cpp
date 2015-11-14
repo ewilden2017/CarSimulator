@@ -68,15 +68,19 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
     glm::vec3 almostLastPoint = path.at(path.size() - 2); //2 for 0-indexed
     glm::vec3 finalPoint = path.back();
     
-    double firstAngle = PI;
+    double firstAngle = PI/2;
     if (secondPoint.x != firstPoint.x) {
         firstAngle = atan2((secondPoint.y - firstPoint.y), (secondPoint.x - firstPoint.x));
-    }
+    } else if (secondPoint.y < firstPoint.y) {
+            firstAngle *= -1;
+        }
     
-    double finalAngle = PI;
-    if ( secondPoint.x != firstPoint.x) {
+    double finalAngle = PI/2;
+    if ( finalPoint.x != almostLastPoint.x) {
         finalAngle = atan2((finalPoint.y - almostLastPoint.y), (finalPoint.x - almostLastPoint.x));
-    }
+    } else if (finalPoint.y < almostLastPoint.y) {
+            finalAngle *= -1;
+        }
     
     double loopIntersectLength = WALL_DISTANCE;
     
@@ -116,14 +120,18 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
         
         printf("X: %f ,Y: %f\n", point1.x, point1.y);
         
-        double angle1 = PI;
+        double angle1 = PI/2;
         if (point1.x != point0.x) {
             angle1 = atan2((point1.y - point0.y), (point1.x - point0.x));
+        } else if (point1.y < point0.y) {
+            angle1 *= -1;
         }
         
-        double angle2 = PI;
+        double angle2 = PI/2;
         if (point2.x != point1.x) {
             angle2 = atan2((point2. y - point1.y), (point2.x - point1.x));
+        } else if (point2.y < point1.y) {
+            angle2 *= -1;
         }
         
         printf("Angles:%f, %f\n", angle1, angle2);
