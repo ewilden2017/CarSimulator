@@ -146,7 +146,14 @@ int main( void )
     std::vector<Wall> walls;
     std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls);
     
-    Car myCar(path.front(), glm::normalize(path.at(1) - path.front()));
+    glm::vec3 rotation;
+    if (path.size() > 1 && path.front() != path.at(1)) {
+        rotation = glm::normalize(path.at(1) - path.front());
+    } else {
+        rotation = glm::vec3(0.0,1.0,0.0);
+    }
+    
+    Car myCar(path.front(), rotation);
     //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
     pCar = &myCar;
  /*   std::vector<Wall> walls;
