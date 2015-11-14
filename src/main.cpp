@@ -144,7 +144,8 @@ void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertex
 int main( void )
 {
     std::vector<Wall> walls;
-    std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls);
+    std::vector<double> distances;
+    std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls, &distances);
     
     if (path.size() < 2 ) {
         printf("At least two points required. Quiting.\n");
@@ -236,7 +237,6 @@ int main( void )
     
     Car::setWatch(myCar);
 
-    int currentPoint = 0;
     int nextPoint = 1;
     
     while(glfwWindowShouldClose(window) == 0) {
@@ -256,10 +256,9 @@ int main( void )
         oldTime = now;
         
         //test position
-        double dotCurrent = glm::dot(myCar.getCenter(), path.at(currentPoint));
-        printf("Next: %i (%f)\n", nextPoint, dotCurrent);
-        if(abs(dotCurrent) < WALL_DISTANCE) {
-            currentPoint = nextPoint;
+        glm::vec3 distance = myCar.getCenter() - path.at(nextPoint);
+        printf("Next: %i (%f)\n", nextPoint, glm::dot(distance, distance));
+        if(glm::dot(distance, distance) < distances.at(nextPoint)*distances.at(nextPoint)) {
             nextPoint++;
             if (nextPoint > path.size() - 1) {
                 nextPoint = 0;

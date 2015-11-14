@@ -15,7 +15,7 @@
 
 #include "common.h"
 
-std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls) {
+std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls, std::vector<double> *distances) {
     std::vector<glm::vec3> path;
     std::ifstream wallFile(filename);
     
@@ -92,6 +92,7 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
         if (abs(finalAngle - firstAngle) != PI) {
             loopIntersectLength = WALL_DISTANCE / cos((firstAngle - finalAngle) / 2);
         }
+        distances->push_back(loopIntersectLength);
         
         lastIntersectUp.x = loopIntersectLength * cos(((finalAngle + firstAngle) / 2) + PI/2) + firstPoint.x;
         lastIntersectUp.y = loopIntersectLength * sin(((finalAngle + firstAngle) / 2) + PI/2) + firstPoint.y;
@@ -105,6 +106,7 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
     
         lastIntersectDown.x = WALL_DISTANCE * cos(firstAngle - PI/2) + firstPoint.x;
         lastIntersectDown.y = WALL_DISTANCE * sin(firstAngle - PI/2) + firstPoint.y;
+        distances->push_back(WALL_DISTANCE);
     }
     
     for (std::vector<glm::vec3>::iterator it = path.begin() + 1; it != path.end() - 1; it++) {
@@ -142,6 +144,7 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
             intersectLength = WALL_DISTANCE / cos((angle2 - angle1) / 2);
         }
         printf("%f\n", intersectLength);
+        distances->push_back(intersectLength);
         
         glm::vec3 intersectUp;
         intersectUp.x = intersectLength * cos(((angle1 + angle2) / 2) + PI/2) + point1.x;
@@ -173,6 +176,7 @@ std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls)
         
         finalIntersectDown.x = WALL_DISTANCE * cos(finalAngle - PI/2) + finalPoint.x;
         finalIntersectDown.y = WALL_DISTANCE * sin(finalAngle - PI/2) + finalPoint.y;
+        distances->push_back(WALL_DISTANCE);
     }
     
     walls->push_back(Wall(lastIntersectUp, finalIntersectUp));
