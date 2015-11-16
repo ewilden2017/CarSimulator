@@ -12,6 +12,7 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "shader.h"
+#include "CarSimConfig.h"
 
 GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path){
 

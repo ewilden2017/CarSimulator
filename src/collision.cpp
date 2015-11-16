@@ -1,4 +1,3 @@
-#include "config.h"
 #include "collision.h"
 
 #include <stdio.h>
@@ -11,6 +10,8 @@
 
 #include "wall.h"
 #include "car.h"
+
+#include "CarSimConfig.h"
 
 const static double carRadius = 1.118 * CAR_SCALE_FACTOR; //for now, is constant
 

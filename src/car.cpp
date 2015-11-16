@@ -1,4 +1,3 @@
-#include "config.h"
 #include "car.h"
 
 #include <stdio.h>
@@ -15,6 +14,8 @@
 #include "collision.h"
 #include "wall.h"
 #include "detectLine.h"
+
+#include "CarSimConfig.h"
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 

@@ -1,0 +1,2 @@
+#define CarSim_VERSION_MAJOR @CarSim_VERSION_MAJOR@
+#define CarSim_VERSION_MINOR @CarSim_VERSION_MINOR@

@@ -19,6 +19,8 @@ GLFWwindow* window;
 #include "detectLine.h"
 #include "wallLoader.h"
 
+#include "CarSimConfig.h"
+
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
 const glm::vec3 WALL_COLOR = glm::vec3(1.0,0.0,0.0);

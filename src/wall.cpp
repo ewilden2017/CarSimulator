@@ -1,4 +1,3 @@
-#include "config.h"
 #include "wall.h"
 
 #include <stdio.h>
@@ -8,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
+
+#include "CarSimConfig.h"
 
 Wall::Wall(glm::vec3 pointA, glm::vec3 pointB) {
     double Ax = pointA.x;

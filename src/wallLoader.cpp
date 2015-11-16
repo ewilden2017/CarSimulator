@@ -1,4 +1,3 @@
-#include "config.h"
 #include "wallLoader.h"
 
 #include "wall.h"
@@ -14,6 +13,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "common.h"
+#include "CarSimConfig.h"
 
 std::vector<glm::vec3> loadWalls(const char* filename, std::vector<Wall> *walls, std::vector<double> *distances) {
     std::vector<glm::vec3> path;

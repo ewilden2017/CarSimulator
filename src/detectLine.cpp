@@ -1,4 +1,3 @@
-#include "config.h"
 #include "detectLine.h"
 
 #include <stdio.h>
@@ -9,6 +8,8 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "common.h"
+
+#include "CarSimConfig.h"
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 
