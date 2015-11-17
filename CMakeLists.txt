@@ -24,6 +24,8 @@ set(SOURCES
     ${SRC_DIR}/wallLoader.h
 )
 
+option(BUILD_THIRD_PARTY "Build dependencies from source. Otherwise, look for dependencies on system." ON)
+
 configure_file(
   "${PROJECT_SOURCE_DIR}/CarSimConfig.h.in"
   "${PROJECT_BINARY_DIR}/CarSimConfig.h"
@@ -38,23 +40,43 @@ else()
 endif()
 include_directories("${PROJECT_BINARY_DIR}")
 
-#Find packages
-find_package(GLFW REQUIRED)
-include_directories(${GLFW_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${GLFW_LIBRARIES})
+#Packages########
+if(BUILD_THIRD_PARTY)
+    #GLFW
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs")
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs")
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation")
+    set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target")
+    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glfw-3.1.2")
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glfw-3.1.2/include")
+    set(LIBS ${LIBS} glfw ${GLFW_LIBRARIES})
 
-find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${GLEW_LIBRARIES})
+    #GLEW
+    set(BUILD_UTILS OFF CACHE BOOL "utilities")
+    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glew-1.13.0/build/cmake")
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glew-0.9.7.1/include")
+    set(LIBS ${LIBS} glew ${GLEW_LIBRARIES})
+
+    #glm
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glm-0.9.7.1/glm")
+else()
+    find_package(GLFW REQUIRED)
+    include_directories(${GLFW_INCLUDE_DIRS})
+    set(LIBS ${LIBS} ${GLFW_LIBRARIES})
+
+    find_package(GLEW REQUIRED)
+    include_directories(${GLEW_INCLUDE_DIRS})
+    set(LIBS ${LIBS} ${GLEW_LIBRARIES})
+
+    find_package(glm REQUIRED)
+    include_directories(${GLM_INCLUDE_DIRS})
+    set(LIBS ${LIBS} ${GLM_LIBRARIES})
+endif()
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
-find_package(glm REQUIRED)
-include_directories(${GLM_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${GLM_LIBRARIES})
-###############
 
 
 add_executable(CarSim ${SOURCES})
