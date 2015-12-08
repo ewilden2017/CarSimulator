@@ -22,6 +22,7 @@ set(SOURCES
     ${SRC_DIR}/wall.h
     ${SRC_DIR}/wallLoader.cpp
     ${SRC_DIR}/wallLoader.h
+    ${SRC_DIR}/evolution.h
 )
 
 option(BUILD_THIRD_PARTY "Build dependencies from source. Otherwise, look for dependencies on system." ON)
@@ -40,7 +41,7 @@ else()
 endif()
 include_directories("${PROJECT_BINARY_DIR}")
 
-#Packages########
+#Libraries########
 if(BUILD_THIRD_PARTY)
     #GLFW
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs")
@@ -73,11 +74,17 @@ else()
     set(LIBS ${LIBS} ${GLM_LIBRARIES})
 endif()
 
+#NEAT needs to be built anyway
+add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/NEAT.1.2.1")
+include_directories("${PROJECT_SOURCE_DIR}/thirdparty/NEAT.1.2.1")
+set(LIBS ${LIBS} neat ${NEAT_LIBRARIES}) 
+
+
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
 
-
+####################################
 add_executable(CarSim ${SOURCES})
 target_link_libraries(CarSim ${LIBS})
