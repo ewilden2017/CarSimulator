@@ -22,7 +22,10 @@ set(SOURCES
     ${SRC_DIR}/wall.h
     ${SRC_DIR}/wallLoader.cpp
     ${SRC_DIR}/wallLoader.h
+    ${SRC_DIR}/evolution.cpp
     ${SRC_DIR}/evolution.h
+    ${SRC_DIR}/simulation.cpp
+    ${SRC_DIR}/simulation.h
 )
 
 option(BUILD_THIRD_PARTY "Build dependencies from source. Otherwise, look for dependencies on system." ON)

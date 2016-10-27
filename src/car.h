@@ -6,6 +6,9 @@ class Wall;
 #include <glm/glm.hpp>
 #include <vector>
 
+#include "neat.h"
+#include "organism.h"
+
 #include "detectLine.h"
 
 //one unit is 1/50 of the screen
@@ -22,6 +25,7 @@ public:
     
     //center, front vector
     Car(glm::vec3 center, glm::vec3 forward);
+    Car(glm::vec3 center, glm::vec3 forward, NEAT::Organism* organism);
     ~Car();
     
     //updates camera to be over the car
@@ -47,6 +51,9 @@ public:
     
     glm::mat4 getMatrix();
     
+    void setOrganism(NEAT::Organism* newOrganism);
+    NEAT::Organism* getOrganism();
+    
     std::vector<DetectLine> getLineList();
     
     
@@ -66,6 +73,8 @@ private:
     glm::mat4 modelMatrix;
     
     std::vector<DetectLine> lines;
+    
+    NEAT::Organism* organism;
     
     static std::vector<Car*> carList;
     static int carCount;

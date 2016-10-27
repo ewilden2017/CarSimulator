@@ -11,6 +11,9 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include "neat.h"
+#include "organism.h"
+
 #include "collision.h"
 #include "wall.h"
 #include "detectLine.h"
@@ -65,6 +68,51 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
         }
     }
     
+    organism = NULL;
+}
+
+Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
+    if (Car::carCount >= MAX_CARS) {
+        printf("Too many cars!\n");
+        throw std::out_of_range("Max car limit exceeded.");
+    }
+    
+    index = Car::carCount++;
+    Car::carList.push_back(this);
+    
+    printf("Making car %i\n", index);
+    
+    forwardVector = forward;    
+    speed = 0.0;
+    acceleration = 0.0;
+        
+    modelMatrix = glm::mat4(1.0);
+    
+    center = glm::vec3(0.0,0.0,0.0);
+    this->setCenter(newCenter);
+    
+    modelMatrix = glm::rotate(modelMatrix, (float)(atan2(forwardVector.y, forwardVector.x) - PI/2), UP); //Model is already rotated a quarter revolution
+
+    
+    steering = 0.0;
+    accelInput = 0.0;
+    
+    hasCamera = false;
+    
+    double angle = atan2(forwardVector.y, forwardVector.x) - PI/2;
+
+    if (LINE_COUNT == 1) {
+        lines.push_back(DetectLine(center, angle, (LINE_START + LINE_END)/2, 10.0));
+    } else {    
+    	double increment = (LINE_END - LINE_START) / (LINE_COUNT - 1);
+    	for(int i = 0; i < LINE_COUNT; i++) {
+            double k = LINE_START + (increment * i);
+        
+            lines.push_back(DetectLine(center, angle, k, 10.0));
+        }
+    }
+    
+    organism = newOrganism;
 }
 
 Car::~Car() {
@@ -198,4 +246,12 @@ glm::mat4 Car::getMatrix() {
 
 std::vector<DetectLine> Car::getLineList() {
     return lines;
+}
+
+void Car::setOrganism(NEAT::Organism* newOrganism) {
+    organism = newOrganism;
+}
+
+NEAT::Organism* Car::getOrganism() {
+    return organism;
 }

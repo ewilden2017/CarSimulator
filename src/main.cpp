@@ -20,6 +20,8 @@ GLFWwindow* window;
 #include "wallLoader.h"
 #include "evolution.h"
 
+#include "neat.h"
+
 #include "CarSimConfig.h"
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
@@ -57,7 +59,6 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
-    
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_W) {
             pCar->inputAccel(1);
@@ -113,36 +114,37 @@ int init() {
         return -1;
     }
     
+    NEAT::load_neat_params("params.ne",true);
+    
     return 0;
 }
 
-void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) {
-    glUseProgram(programID);
+/* void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) { */
+/*     glUseProgram(programID); */
     
-    glBindVertexArray(VAO);
+/*     glBindVertexArray(VAO); */
     
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    glUniform3fv(ColorID, 1, &color[0]);
-    //TODO: Make this respect size of data
-    glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle
-    
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
+/*     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]); */
+/*     glUniform3fv(ColorID, 1, &color[0]); */
+/*     //TODO: Make this respect size of data */
+/*     glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle */
+/*     glBindVertexArray(0); */
+/*     glUseProgram(0); */
+/* } */
 
-void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) {
-    glUseProgram(programID);
+/* void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) { */
+/*     glUseProgram(programID); */
     
-    glBindVertexArray(VAO);
+/*     glBindVertexArray(VAO); */
     
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    glUniform3fv(ColorID, 1, &color[0]);
+/*     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]); */
+/*     glUniform3fv(ColorID, 1, &color[0]); */
     
-    glDrawArrays(GL_LINES, 0 , 2);
+/*     glDrawArrays(GL_LINES, 0 , 2); */
     
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
+/*     glBindVertexArray(0); */
+/*     glUseProgram(0); */
+/* } */
 
 int main( void )
 {
@@ -180,10 +182,10 @@ int main( void )
     // black background
     glClearColor(0.0, 0.0, 0.0, 0.0);
     
-    GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" );
+    /* GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" ); */
     
-    GLuint MatrixID = glGetUniformLocation(programID, "MVP");
-    GLuint ColorID = glGetUniformLocation(programID, "inColor");
+    /* GLuint MatrixID = glGetUniformLocation(programID, "MVP"); */
+    /* GLuint ColorID = glGetUniformLocation(programID, "inColor"); */
     
     glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,100.0); // In world coordinates
     glm::mat4 View = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
@@ -193,136 +195,137 @@ int main( void )
     
     //WARNING: I don't actually understand vertex arrays
     
-    GLuint carbuffer;
-    GLuint carVAO;
+    /* GLuint carbuffer; */
+    /* GLuint carVAO; */
     
-    glGenBuffers(1, &carbuffer);rotation = glm::vec3(0.0,1.0,0.0);
-    glBindBuffer(GL_ARRAY_BUFFER, carbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(carData), carData, GL_STATIC_DRAW);
+    /* glGenBuffers(1, &carbuffer); */
+    /* glBindBuffer(GL_ARRAY_BUFFER, carbuffer); */
+    /* glBufferData(GL_ARRAY_BUFFER, sizeof(carData), carData, GL_STATIC_DRAW); */
     
-    glGenVertexArrays(1, &carVAO);
-    glBindVertexArray(carVAO);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    /* glGenVertexArrays(1, &carVAO); */
+    /* glBindVertexArray(carVAO); */
+    /* glEnableVertexAttribArray(0); */
+    /* glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); */
 
-    GLuint wallbuffer;
-    GLuint wallVAO;
-    glGenBuffers(1, &wallbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, wallbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(wallData), wallData, GL_STATIC_DRAW);
+    /* GLuint wallbuffer; */
+    /* GLuint wallVAO; */
+    /* glGenBuffers(1, &wallbuffer); */
+    /* glBindBuffer(GL_ARRAY_BUFFER, wallbuffer); */
+    /* glBufferData(GL_ARRAY_BUFFER, sizeof(wallData), wallData, GL_STATIC_DRAW); */
     
-    glGenVertexArrays(1, &wallVAO);
-    glBindVertexArray(wallVAO);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0); 
+    /* glGenVertexArrays(1, &wallVAO); */
+    /* glBindVertexArray(wallVAO); */
+    /* glEnableVertexAttribArray(0); */
+    /* glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); */
+    /* glBindBuffer(GL_ARRAY_BUFFER, 0); */
+    /* glBindVertexArray(0); */ 
     
-    GLuint linebuffer;
-    GLuint lineVAO;
+    /* GLuint linebuffer; */
+    /* GLuint lineVAO; */
     
-    glGenBuffers(1, &linebuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, linebuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
+    /* glGenBuffers(1, &linebuffer); */
+    /* glBindBuffer(GL_ARRAY_BUFFER, linebuffer); */
+    /* glBufferData(GL_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW); */
     
-    glGenVertexArrays(1, &lineVAO);
-    glBindVertexArray(lineVAO);rotation = glm::vec3(0.0,1.0,0.0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    /* glGenVertexArrays(1, &lineVAO); */
+    /* glBindVertexArray(lineVAO);rotation = glm::vec3(0.0,1.0,0.0); */
+    /* glEnableVertexAttribArray(0); */
+    /* glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0); */
     
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    /* glBindBuffer(GL_ARRAY_BUFFER, 0); */
+    /* glBindVertexArray(0); */
     
-    double frameLastTime = glfwGetTime();
-    int nbFrames = 0;
+    /* double frameLastTime = glfwGetTime(); */
+    /* int nbFrames = 0; */
     
-    double oldTime = glfwGetTime();
+    /* double oldTime = glfwGetTime(); */
     
-    Car::setWatch(myCar);
+    /* Car::setWatch(myCar); */
 
-    int nextPoint = 1;
+    /* int nextPoint = 1; */
+    NEAT::Population* Junk = carTest(2, &walls, window);
     
-    while(glfwWindowShouldClose(window) == 0) {
+    /* while(glfwWindowShouldClose(window) == 0) { */
         
-        // Measure speed
-        double currentTime = glfwGetTime();
-        nbFrames++;        
-        if ( currentTime - frameLastTime >= 1.0 ) {
-            // printf and reset timer
-            printf("%f ms/frame\n", 1000.0/double(nbFrames));
-            nbFrames = 0;
-            frameLastTime += 1.0;
-        }
+    /*     // Measure speed */
+    /*     double currentTime = glfwGetTime(); */
+    /*     nbFrames++; */        
+    /*     if ( currentTime - frameLastTime >= 1.0 ) { */
+    /*         // printf and reset timer */
+    /*         printf("%f ms/frame\n", 1000.0/double(nbFrames)); */
+    /*         nbFrames = 0; */
+    /*         frameLastTime += 1.0; */
+    /*     } */
         
-        double now = glfwGetTime();
-        double deltaTime = now - oldTime;
-        oldTime = now;
+    /*     double now = glfwGetTime(); */
+    /*     double deltaTime = now - oldTime; */
+    /*     oldTime = now; */
         
-        //test position
-        glm::vec3 distance = myCar.getCenter() - path.at(nextPoint);
-        printf("Next: %i (%f)\n", nextPoint, glm::dot(distance, distance));
-        if(glm::dot(distance, distance) < distances.at(nextPoint)*distances.at(nextPoint)) {
-            nextPoint++;
-            if (nextPoint > path.size() - 1) {
-                nextPoint = 0;
-            }
-        }
+    /*     //test position */
+    /*     glm::vec3 distance = myCar.getCenter() - path.at(nextPoint); */
+    /*     printf("Next: %i (%f)\n", nextPoint, glm::dot(distance, distance)); */
+    /*     if(glm::dot(distance, distance) < distances.at(nextPoint)*distances.at(nextPoint)) { */
+    /*         nextPoint++; */
+    /*         if (nextPoint > path.size() - 1) { */
+    /*             nextPoint = 0; */
+    /*         } */
+    /*     } */
         
-        std::vector<Car*> carList = Car::getCarList();
+    /*     std::vector<Car*> carList = Car::getCarList(); */
         
-        glClear( GL_COLOR_BUFFER_BIT );
-        //start drawing
+    /*     glClear( GL_COLOR_BUFFER_BIT ); */
+    /*     //start drawing */
         
-        for(std::vector<Car*>::iterator it = carList.begin(); it != carList.end(); it++) {
-            (*it)->update(deltaTime,walls);            
+    /*     for(std::vector<Car*>::iterator it = carList.begin(); it != carList.end(); it++) { */
+    /*         (*it)->update(deltaTime,walls); */            
            
             
-            glm::mat4 carMatrix = Projection * Car::getCamera() * (*it)->getMatrix();
-            render(programID, MatrixID, ColorID, carbuffer, carVAO, carMatrix, CAR_COLOR);
+    /*         glm::mat4 carMatrix = Projection * Car::getCamera() * (*it)->getMatrix(); */
+    /*         render(programID, MatrixID, ColorID, carbuffer, carVAO, carMatrix, CAR_COLOR); */
             
-            std::vector<DetectLine> lines = (*it)->getLineList();
-            for (std::vector<DetectLine>::iterator lIt = lines.begin(); lIt != lines.end(); lIt++) {
-                renderLine(programID, MatrixID, ColorID, linebuffer, lineVAO, Projection * Car::getCamera() * lIt->getMatrix(), LINE_COLOR);
+    /*         std::vector<DetectLine> lines = (*it)->getLineList(); */
+    /*         for (std::vector<DetectLine>::iterator lIt = lines.begin(); lIt != lines.end(); lIt++) { */
+    /*             renderLine(programID, MatrixID, ColorID, linebuffer, lineVAO, Projection * Car::getCamera() * lIt->getMatrix(), LINE_COLOR); */
                 
-                double closest = -1;
-                for (std::vector<Wall>::iterator wIt = walls.begin(); wIt != walls.end(); wIt++) {
-                    glm::mat4 wallMatrix = wIt->getMatrix();
-                    glm::vec3 wallB = glm::vec3(wallMatrix * glm::vec4(1.0,0.0,0.0,1.0));
-                    glm::vec3 wallA = glm::vec3(wallMatrix * glm::vec4(-1.0,0.0,0.0,1.0));
-                    //printf("A:%s, B:%s\n", glm::to_string(wallA).c_str(), glm::to_string(wallB).c_str());
-                    double out = 0;
-                    if (collisionLineLine(lIt->getCenter(), lIt->getEnd(), wallA , wallB, &out) == true) {
-                        if (closest == -1 || out < closest) {
-                            closest = out;
-                        }
-                    }
-                }
-                printf("Closest:%f\n",closest);
+    /*             double closest = -1; */
+    /*             for (std::vector<Wall>::iterator wIt = walls.begin(); wIt != walls.end(); wIt++) { */
+    /*                 glm::mat4 wallMatrix = wIt->getMatrix(); */
+    /*                 glm::vec3 wallB = glm::vec3(wallMatrix * glm::vec4(1.0,0.0,0.0,1.0)); */
+    /*                 glm::vec3 wallA = glm::vec3(wallMatrix * glm::vec4(-1.0,0.0,0.0,1.0)); */
+    /*                 //printf("A:%s, B:%s\n", glm::to_string(wallA).c_str(), glm::to_string(wallB).c_str()); */
+    /*                 double out = 0; */
+    /*                 if (collisionLineLine(lIt->getCenter(), lIt->getEnd(), wallA , wallB, &out) == true) { */
+    /*                     if (closest == -1 || out < closest) { */
+    /*                         closest = out; */
+    /*                     } */
+    /*                 } */
+    /*             } */
+    /*             printf("Closest:%f\n",closest); */
                 
-                lIt->setDistance(closest);
-            }
-        }
+    /*             lIt->setDistance(closest); */
+    /*         } */
+    /*     } */
         
-        for(int i = 0; i < walls.size(); i++) {
-            glm::mat4 wallMatrix = Projection * Car::getCamera() * walls.at(i).getMatrix();
-            render(programID, MatrixID, ColorID, wallbuffer, wallVAO, wallMatrix, WALL_COLOR);
-        }
+    /*     for(int i = 0; i < walls.size(); i++) { */
+    /*         glm::mat4 wallMatrix = Projection * Car::getCamera() * walls.at(i).getMatrix(); */
+    /*         render(programID, MatrixID, ColorID, wallbuffer, wallVAO, wallMatrix, WALL_COLOR); */
+    /*     } */
         
-        //finish drawing
-        glfwSwapBuffers(window);
+    /*     //finish drawing */
+    /*     glfwSwapBuffers(window); */
         
-        glClear( GL_COLOR_BUFFER_BIT );
-        glfwPollEvents(); 
-    }
+    /*     glClear( GL_COLOR_BUFFER_BIT ); */
+    /*     glfwPollEvents(); */ 
+    /* } */
     
     // Cleanup VBO and shader
-    glDeleteBuffers(1, &carbuffer);
-    glDeleteBuffers(1, &wallbuffer);
-    glDeleteBuffers(1, &linebuffer);
-    glDeleteProgram(programID);
-    glDeleteVertexArrays(1, &carVAO);
-    glDeleteVertexArrays(1, &wallVAO);
-    glDeleteVertexArrays(1, &lineVAO);
+    /* glDeleteBuffers(1, &carbuffer); */
+    //glDeleteBuffers(1, &wallbuffer);
+    //glDeleteBuffers(1, &linebuffer);
+    /* glDeleteProgram(programID); */
+    //glDeleteVertexArrays(1, &carVAO);
+    //glDeleteVertexArrays(1, &wallVAO);
+    //glDeleteVertexArrays(1, &lineVAO);
     
     // Close OpenGL window and terminate GLFW
     glfwTerminate();

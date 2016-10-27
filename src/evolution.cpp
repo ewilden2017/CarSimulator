@@ -1,6 +1,9 @@
 #include "evolution.h"
 
 #include "detectLine.h"
+#include "car.h"
+#include "simulation.h"
+#include "wall.h"
 
 #include "neat.h"
 #include "network.h"
@@ -9,33 +12,38 @@
 #include "genome.h"
 #include "species.h"
 
-#include <stdio.h>
-#include <ifstream>
-#include <vector>
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
 
-NEAT::Population* carTest(int gens) {
+#include <stdio.h>
+#include <fstream>
+#include <vector>
+#include <iostream>
+
+NEAT::Population* carTest(int gens, std::vector<Wall>* walls, GLFWwindow* window) {
     char curword[20];
     int id;
     NEAT::Genome* startGenome;
-    Population *pop;
-    
+    NEAT::Population *pop;
     int evals[NEAT::num_runs];  //Hold records for each run
     int genes[NEAT::num_runs];
     int nodes[NEAT::num_runs];
     
-    ifstream inFile = ifstream("startgenes")
-    printf("Reading initial genes...");
-    inFile>>curword;
-    inFile>>id;
-    startGenome = new Genome(id, inFile); //TODO FREE
+    std::ifstream inFile;
+	inFile.open("startgenes");
+    printf("Reading initial genes...\n");
+//    inFile >> curword;
+//	std::cout << curword << std::endl;
+//    inFile >> id;
+    startGenome = new NEAT::Genome(1, inFile); //TODO FREE
     inFile.close();
     printf("Done.\n");
     
     for (int run = 0; run < NEAT::num_runs; run++) {
         printf("Spawning Population\n");
-        pop = new Population(startGenome,NEAT::pop_size);
+        pop = new NEAT::Population(startGenome,NEAT::pop_size);
         
-        cout<<"Verifying Spawned Pop"<<endl;
+        printf("Verifying Spawned Pop\n");
         pop->verify();
         
         for (int gen = 1; gen < gens; gen++) {
@@ -48,21 +56,24 @@ NEAT::Population* carTest(int gens) {
             int winnerGenes;
             int winnerNodes;
             
-            int highest = carEpoch(pop, gen, filename, winnerNum, winnerGenes, winnerNodes);
+            int highest = carEpoch(pop, gen, filename, winnerNum, winnerGenes, winnerNodes, walls, window);
             
         }
     }
 }
 
-bool carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnernum, int &winnergenes,int &winnernodes) {
+int carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnernum, int &winnergenes,int &winnernodes, std::vector<Wall>* walls, GLFWwindow* window) {
     std::vector<NEAT::Organism*>::iterator currentOrg;
     std::vector<NEAT::Species*>::iterator currentSpecies;
     
+    std::vector<Car*> cars;
+    
     int highest = -1;
     for(currentOrg = (pop->organisms).begin(); currentOrg != (pop->organisms).end(); ++currentOrg) {
-        carEvaluate(*currentOrg);
+        cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0), *currentOrg));
+        printf("Hello!\n");
     }
-    
+    carSimulation(cars, walls, window);
     for(currentSpecies = (pop->species).begin(); currentSpecies != (pop->species).end(); ++currentSpecies) {
 
         (*currentSpecies)->compute_average_fitness();
@@ -75,8 +86,4 @@ bool carEpoch(NEAT::Population* pop, int generation, char *filename, int &winner
     
     pop->epoch(generation);
 }
-
-void carEvaluate(NEAT::Organism *org) {
-    Network *net;
-    out[OUTPUTS];
     
