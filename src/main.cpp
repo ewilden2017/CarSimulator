@@ -19,6 +19,7 @@ GLFWwindow* window;
 #include "detectLine.h"
 #include "wallLoader.h"
 #include "evolution.h"
+#include "render.h"
 
 #include "neat.h"
 
@@ -32,28 +33,31 @@ const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0), glm::vec3(5.0,5.0,5.0)
 
 Car* pCar = NULL;
 
-const GLfloat carData[] = { 
+const GLfloat renderData[] = { 
+//car
     -0.5f, -1.0f, 0.0f,
     0.5f, -1.0f, 0.0f,
     -0.5f,  1.0f, 0.0f,
     0.5f, 1.0f, 0.0f,
     -0.5f, 1.0f, 0.0f,
     0.5f, -1.0f, 0.0f,
-};
-
-const GLfloat wallData[] = { 
+//wall
     -1.0f, -0.2f, 0.0f,
     1.0f, -0.2f, 0.0f,
     -1.0f,  0.2f, 0.0f,
     1.0f, 0.2f, 0.0f,
     -1.0f, 0.2f, 0.0f,
     1.0f, -0.2f, 0.0f,
-};
-
-const GLfloat lineData[] = {
+//path
     0.0f , 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
 };
+const int CAR_START = 0;
+const int CAR_LENGTH = 2*3;
+const int WALL_START = CAR_START + CAR_LENGTH;
+const int WALL_LENGTH = 2*3;
+const int PATH_START = WALL_START + WALL_LENGTH;
+const int PATH_LENGTH = 2;
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -115,36 +119,14 @@ int init() {
     }
     
     NEAT::load_neat_params("params.ne",true);
+
+	if  (!Render::init(renderData, sizeof(renderData))) {
+		fprintf(stderr, "Failed to initialize Rendering system\n");
+		return -1;
+	}
     
     return 0;
 }
-
-/* void render(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) { */
-/*     glUseProgram(programID); */
-    
-/*     glBindVertexArray(VAO); */
-    
-/*     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]); */
-/*     glUniform3fv(ColorID, 1, &color[0]); */
-/*     //TODO: Make this respect size of data */
-/*     glDrawArrays(GL_TRIANGLES, 0, 2*3); // 3 indices starting at 0 -> 1 triangle */
-/*     glBindVertexArray(0); */
-/*     glUseProgram(0); */
-/* } */
-
-/* void renderLine(GLuint programID, GLuint MatrixID, GLuint ColorID, GLuint vertexbuffer, GLuint VAO, glm::mat4 MVP, glm::vec3 color) { */
-/*     glUseProgram(programID); */
-    
-/*     glBindVertexArray(VAO); */
-    
-/*     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]); */
-/*     glUniform3fv(ColorID, 1, &color[0]); */
-    
-/*     glDrawArrays(GL_LINES, 0 , 2); */
-    
-/*     glBindVertexArray(0); */
-/*     glUseProgram(0); */
-/* } */
 
 int main( void )
 {

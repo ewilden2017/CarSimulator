@@ -26,6 +26,8 @@ set(SOURCES
     ${SRC_DIR}/evolution.h
     ${SRC_DIR}/simulation.cpp
     ${SRC_DIR}/simulation.h
+	${SRC_DIR}/render.cpp
+	${SRC_DIR}/render.h
 )
 
 option(BUILD_THIRD_PARTY "Build dependencies from source. Otherwise, look for dependencies on system." ON)
