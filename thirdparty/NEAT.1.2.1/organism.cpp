@@ -14,7 +14,6 @@
    limitations under the License.
 */
 #include "organism.h"
-
 using namespace NEAT;
 
 Organism::Organism(double fit, Genome *g,int gen, const char* md) {
@@ -22,6 +21,9 @@ Organism::Organism(double fit, Genome *g,int gen, const char* md) {
 	orig_fitness=fitness;
 	gnome=g;
 	net=gnome->genesis(gnome->genome_id);
+
+	double test[] = {0.0};
+
 	species=0;  //Start it in no Species
 	expected_offspring=0;
 	generation=gen;

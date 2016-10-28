@@ -25,7 +25,7 @@ DetectLine::DetectLine(glm::vec3 newCenter, double newAngle, double newOffset, d
     translation = glm::translate(glm::mat4(1.0), newCenter);
     rotation = glm::rotate(glm::mat4(1.0), (float)newAngle + (float)offset, UP);
     
-    printf("Center:%s Angle: %f Offset: %f Length: %f\n", glm::to_string(center).c_str(), angle, offset, length);
+    /* printf("Center:%s Angle: %f Offset: %f Length: %f\n", glm::to_string(center).c_str(), angle, offset, length); */
 }
 
 glm::vec3 DetectLine::getCenter() {

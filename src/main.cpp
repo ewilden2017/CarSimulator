@@ -243,7 +243,7 @@ int main( void )
     /* Car::setWatch(myCar); */
 
     /* int nextPoint = 1; */
-    NEAT::Population* Junk = carTest(2, &walls, window);
+    NEAT::Population* Junk = carTest(2, &walls, &path, &distances, window);
     
     /* while(glfwWindowShouldClose(window) == 0) { */
         

@@ -34,10 +34,13 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     }
     
     index = Car::carCount++;
-    Car::carList.push_back(this);
+    /* Car::carList.push_back(this); */
     
     printf("Making car %i\n", index);
     
+	pointDist = 0;
+	stuckTimer = 0;
+
     forwardVector = forward;    
     speed = 0.0;
     acceleration = 0.0;
@@ -78,10 +81,13 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
     }
     
     index = Car::carCount++;
-    Car::carList.push_back(this);
+    /* Car::carList.push_back(this); */
     
     printf("Making car %i\n", index);
     
+	pointDist = 0;
+	stuckTimer = 0;
+
     forwardVector = forward;    
     speed = 0.0;
     acceleration = 0.0;
@@ -117,7 +123,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
 
 Car::~Car() {
     printf("destroying car %i\n", index);
-    Car::carList.erase(Car::carList.begin() + index);
+	/* Car::carList.at(index) = NULL; */
     Car::carCount--;
 }
 

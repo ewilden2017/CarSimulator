@@ -23,6 +23,8 @@ const int CAR_SCALE_FACTOR = 1;
 class Car {
 public:
     
+	double pointDist;
+	int stuckTimer;
     //center, front vector
     Car(glm::vec3 center, glm::vec3 forward);
     Car(glm::vec3 center, glm::vec3 forward, NEAT::Organism* organism);

@@ -6,11 +6,12 @@
 #include "wall.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 const int OUTPUTS = 2;
 
-NEAT::Population* carTest(int gens, std::vector<Wall>* walls, GLFWwindow* window);
-int carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnernum, int &winnergenes,int &winnernodes, std::vector<Wall>* walls, GLFWwindow* window);
+NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window);
+int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window);
 void carEvaluate(NEAT::Organism *org);
 
 #endif

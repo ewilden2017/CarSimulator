@@ -20,7 +20,7 @@
 #include <vector>
 #include <iostream>
 
-NEAT::Population* carTest(int gens, std::vector<Wall>* walls, GLFWwindow* window) {
+NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window) {
     char curword[20];
     int id;
     NEAT::Genome* startGenome;
@@ -32,9 +32,8 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, GLFWwindow* window
     std::ifstream inFile;
 	inFile.open("startgenes");
     printf("Reading initial genes...\n");
-//    inFile >> curword;
-//	std::cout << curword << std::endl;
-//    inFile >> id;
+    inFile >> curword;
+    inFile >> id;
     startGenome = new NEAT::Genome(1, inFile); //TODO FREE
     inFile.close();
     printf("Done.\n");
@@ -52,17 +51,13 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, GLFWwindow* window
             char filename[50];
             sprintf(filename, "Generations/gen_%i", gen);
             
-            int winnerNum;
-            int winnerGenes;
-            int winnerNodes;
-            
-            int highest = carEpoch(pop, gen, filename, winnerNum, winnerGenes, winnerNodes, walls, window);
+            int highest = carEpoch(pop, gen, filename, walls, path, distances, window);
             
         }
     }
 }
 
-int carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnernum, int &winnergenes,int &winnernodes, std::vector<Wall>* walls, GLFWwindow* window) {
+int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window) {
     std::vector<NEAT::Organism*>::iterator currentOrg;
     std::vector<NEAT::Species*>::iterator currentSpecies;
     
@@ -73,7 +68,7 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnern
         cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0), *currentOrg));
         printf("Hello!\n");
     }
-    carSimulation(cars, walls, window);
+    carSimulation(cars, walls, path, distances, window);
     for(currentSpecies = (pop->species).begin(); currentSpecies != (pop->species).end(); ++currentSpecies) {
 
         (*currentSpecies)->compute_average_fitness();
@@ -83,7 +78,9 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, int &winnern
     if  ((generation % (NEAT::print_every) == 0)) {
         pop->print_to_file_by_species(filename);
     }
+	double high = pop->highest_fitness;
     
     pop->epoch(generation);
+	return high;
 }
     
