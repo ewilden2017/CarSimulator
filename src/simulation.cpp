@@ -45,13 +45,13 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 	int nbFrames = 0;
 
     double StartTime = glfwGetTime();
-    double time = StartTime;
+    double time = 0;
     
     double frameLastTime = StartTime;
     double oldTime = StartTime;
     
 	printf("starting\n");
-    while(cars.size() > 0 && time < 60 * 1) {
+    while(cars.size() > 0 && time < 60 * 1 / Car::getSpeedMulti()) {
         time = glfwGetTime() - StartTime;
         
         // Measure speed

@@ -128,8 +128,10 @@ int init() {
     return 0;
 }
 
-int main( void )
-{
+int main(int argc, char* argv[]) {
+	if (argc > 1) {
+		Car::setSpeedMulti(strtod(argv[1], NULL));
+	}
     std::vector<Wall> walls;
     std::vector<double> distances;
     std::vector<glm::vec3> path = loadWalls("Walls.txt", &walls, &distances);
@@ -146,9 +148,9 @@ int main( void )
         rotation = glm::vec3(0.0,0.0,0.0);
     }
     
-    Car myCar(path.front(), rotation);
+    /* Car myCar(path.front(), rotation); */
     //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
-    pCar = &myCar;
+    /* pCar = &myCar; */
  /*   std::vector<Wall> walls;
     walls.push_back(Wall(glm::vec3(0.0,0.0,0.0), glm::vec3(15.0,5.0,0.0)));
     walls.push_back(Wall(glm::vec3(15.0,5.0,0.0), glm::vec3(30.0,12.5,0.0)));
@@ -225,7 +227,7 @@ int main( void )
     /* Car::setWatch(myCar); */
 
     /* int nextPoint = 1; */
-    NEAT::Population* Junk = carTest(2, &walls, &path, &distances, window);
+    NEAT::Population* Junk = carTest(5, &walls, &path, &distances, window);
     
     /* while(glfwWindowShouldClose(window) == 0) { */
         

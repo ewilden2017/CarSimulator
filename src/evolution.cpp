@@ -45,14 +45,13 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::v
         printf("Verifying Spawned Pop\n");
         pop->verify();
         
-        for (int gen = 1; gen < gens; gen++) {
+        for (int gen = 1; gen <= gens; gen++) {
             printf("Generation %i\n", gen);
             
             char filename[50];
             sprintf(filename, "Generations/gen_%i", gen);
             
             int highest = carEpoch(pop, gen, filename, walls, path, distances, window);
-            
         }
     }
 }
@@ -66,7 +65,6 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<
     int highest = -1;
     for(currentOrg = (pop->organisms).begin(); currentOrg != (pop->organisms).end(); ++currentOrg) {
         cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0), *currentOrg));
-        printf("Hello!\n");
     }
     carSimulation(cars, walls, path, distances, window);
     for(currentSpecies = (pop->species).begin(); currentSpecies != (pop->species).end(); ++currentSpecies) {

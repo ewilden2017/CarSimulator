@@ -58,6 +58,8 @@ public:
     
     std::vector<DetectLine> getLineList();
     
+	static void setSpeedMulti(double multi);
+	static double getSpeedMulti();
     
 private:
     double acceleration;
@@ -82,6 +84,7 @@ private:
     static int carCount;
     
     static glm::mat4 Camera;
+	static double speedMulti;
 };
     
 #endif

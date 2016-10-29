@@ -26,6 +26,7 @@ std::vector<Car*> Car::carList;
 int Car::carCount = 0;
 
 glm::mat4 Car::Camera = glm::mat4(1.0);
+double Car::speedMulti = 1.0;
 
 Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     if (Car::carCount >= MAX_CARS) {
@@ -188,6 +189,8 @@ void Car::inputSteer(double steer) {
 }
 
 void Car::update(double deltaTime, std::vector<Wall> walls) {
+	deltaTime *= speedMulti;
+
     //acceleration
     acceleration = accelInput * ACCEL_FACTOR;
     
@@ -260,4 +263,14 @@ void Car::setOrganism(NEAT::Organism* newOrganism) {
 
 NEAT::Organism* Car::getOrganism() {
     return organism;
+}
+
+void Car::setSpeedMulti(double multi) {
+	if (multi > 0) {
+	speedMulti = multi;
+	}	
+}
+
+double Car::getSpeedMulti() {
+	return speedMulti;
 }
