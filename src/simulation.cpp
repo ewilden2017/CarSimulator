@@ -31,7 +31,8 @@ const int WALL_LENGTH = 2*3;
 const int PATH_START = WALL_START + WALL_LENGTH;
 const int PATH_LENGTH = 2;
 
-const glm::vec3 NODE_OFFSET = glm::vec3 (30.0, -25.0, 0.0);
+const glm::vec3 NODE_OFFSET = glm::vec3 (20.0, -25.0, 0.0);
+const double NODE_SCALE = 2.0;
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
@@ -202,7 +203,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 
                 for (int i = 0; i < network->inputs.size(); i++) {
                     NEAT::NNode* node = network->inputs.at(network->inputs.size() - 1 - i);
-                    glm::vec3 position = glm::vec3(i, 0.0f, 0.0f) + NODE_OFFSET;
+                    glm::vec3 position = glm::vec3(i * NODE_SCALE, 0.0f, 0.0f) + NODE_OFFSET;
                     nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
                     glm::mat4 pointMatrix = Projection * glm::translate(glm::mat4(), position);
 
@@ -232,7 +233,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 
                 for (int i = 0; i < network->outputs.size(); i++) {
                     NEAT::NNode* node = network->outputs.at(i);
-                    glm::vec3 position = glm::vec3(i, -1 * (network->max_depth() + 5), 0.0f) + NODE_OFFSET;
+                    glm::vec3 position = glm::vec3(i * NODE_SCALE, -1 * (network->max_depth() + 5) * NODE_SCALE, 0.0f) + NODE_OFFSET;
                     nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
                     glm::mat4 pointMatrix = Projection * glm::translate(glm::mat4(), position);
 
@@ -256,7 +257,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 
                 for (int i = network->inputs.size(); i < network->all_nodes.size() - network->outputs.size(); i++) {
                     NEAT::NNode* node = network->all_nodes.at(i);
-                    glm::vec3 position = glm::vec3(i, node->depth(0, network), 0.0) + NODE_OFFSET;
+                    glm::vec3 position = glm::vec3(i * NODE_SCALE, node->depth(0, network) * NODE_SCALE, 0.0) + NODE_OFFSET;
                     nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
                     glm::mat4 pointMatrix = Projection * glm::translate(glm::mat4(), position + glm::vec3(-30.0,0.0,0.0));
 
