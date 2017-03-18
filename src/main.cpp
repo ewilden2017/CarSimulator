@@ -153,13 +153,15 @@ int main(int argc, char* argv[]) {
     
     // black background
     glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     
     /* GLuint programID = LoadShaders( "SimpleTransform.vertexshader", "SingleColor.fragmentshader" ); */
     
     /* GLuint MatrixID = glGetUniformLocation(programID, "MVP"); */
     /* GLuint ColorID = glGetUniformLocation(programID, "inColor"); */
     
-    glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,100.0); // In world coordinates
+    glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,-100.0); // In world coordinates
     glm::mat4 View = glm::lookAt(glm::vec3(0,10,1), glm::vec3(0,10,0), glm::vec3(0,1,0));
     
     Car::setCamera(View);
