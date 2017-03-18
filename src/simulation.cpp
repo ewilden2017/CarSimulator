@@ -55,7 +55,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
     
 	printf("starting\n");
     Car::setSelected(0);
-    while(cars.size() > 0 && time < 60 * 1 / Car::getSpeedMulti()) {
+    while(cars.size() > 0 && time < 60 * 1 / Car::getSpeedMulti() && glfwWindowShouldClose(window) == 0) {
         time = glfwGetTime() - StartTime;
         
         // Measure speed
@@ -187,6 +187,8 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     color = color < 0.1 ? color : color - 0.1;
 
                     glm::vec3 renderColor;
+
+                    //Bias color
                     if (i == network->inputs.size() - 1) {
                         renderColor = glm::vec3(0.0, 0.0, 1.0);
                     } else {

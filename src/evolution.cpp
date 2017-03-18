@@ -39,6 +39,9 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::v
     printf("Done.\n");
     
     for (int run = 0; run < NEAT::num_runs; run++) {
+        if (glfwWindowShouldClose(window) != 0) {
+            break;
+        }
         printf("Spawning Population\n");
         pop = new NEAT::Population(startGenome,NEAT::pop_size);
         
@@ -46,6 +49,9 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::v
         pop->verify();
         
         for (int gen = 1; gen <= gens; gen++) {
+            if (glfwWindowShouldClose(window) != 0) {
+                break;
+            }
             printf("Generation %i\n", gen);
             
             char filename[50];
@@ -75,6 +81,11 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<
         cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),rotation, *currentOrg));
     }
     carSimulation(cars, walls, path, distances, window);
+    
+    if(glfwWindowShouldClose(window) != 0) {
+        return -1;
+    }
+
     for(currentSpecies = (pop->species).begin(); currentSpecies != (pop->species).end(); ++currentSpecies) {
 
         (*currentSpecies)->compute_average_fitness();
