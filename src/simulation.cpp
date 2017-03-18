@@ -196,6 +196,28 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     }
                     Render::renderPoint(pointMatrix, renderColor, 5);
                 }
+
+                for (int i = 0; i < network->outputs.size(); i++) {
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), glm::vec3(i, -1 * (network->max_depth() + 1), 0.0f) + NODE_OFFSET);
+
+                    float color = network->outputs.at(i)->activation;
+                    color = color < 0.0 ? 0.0 : 1 - color; 
+                    color = color < 0.1 ? color : color - 0.1;
+
+                    Render::renderPoint(pointMatrix, glm::vec3(0.1 + color, 0.1, 0.1), 5);
+                }
+
+                for (int i = 0; i < network->all_nodes.size(); i++) {
+                    NEAT::NNode* node = network->all_nodes.at(i);
+                    glm::vec3 position = glm::vec3(i, node->depth(0, network), 0.0);
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), position + NODE_OFFSET + glm::vec3(-30.0,0.0,0.0));
+
+                    float color = node->activation;
+                    color = color < 0.0 ? 0.0 : 1 - color;
+                    color = color < 0.1 ? color : color - 0.1;
+
+                    Render::renderPoint(pointMatrix, glm::vec3(0.1, 0.1, 0.1 + color), 5);
+                }
             }
         }
     

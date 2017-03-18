@@ -77,7 +77,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
         int next = Car::getSelected() + 1;
-        if (next >= Car::getCount() - 1) {
+        if (next >= Car::getCount()) {
             next = 0;
         }
         Car::setSelected(next);
