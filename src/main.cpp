@@ -61,6 +61,10 @@ const int WALL_LENGTH = 2*3;
 const int PATH_START = WALL_START + WALL_LENGTH;
 const int PATH_LENGTH = 2;
 
+bool dragging = false;
+double lastx = 0.0;
+double lasty = 0.0;
+
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);

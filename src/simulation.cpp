@@ -40,6 +40,8 @@ const glm::vec3 WALL_COLOR = glm::vec3(1.0,0.0,0.0);
 const glm::vec3 LINE_COLOR = glm::vec3(0.1,0.1,0.1);
 const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0), glm::vec3(5.0,5.0,5.0));
 
+const double CAMERA_PAN_SPEED = 15.0;
+
 void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window) {
     
     glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,100.0); // In world coordinates
@@ -72,7 +74,23 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
         double now = glfwGetTime();
         double deltaTime = now - oldTime;
         oldTime = now;
-        
+       
+        //Move the camera
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            glm::mat4 camera = glm::translate(Car::getCamera(), glm::vec3(0.0, -CAMERA_PAN_SPEED * deltaTime, 0.0));
+            Car::setCamera(camera);
+        } else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            glm::mat4 camera = glm::translate(Car::getCamera(), glm::vec3(0.0, CAMERA_PAN_SPEED * deltaTime, 0.0));
+            Car::setCamera(camera);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            glm::mat4 camera = glm::translate(Car::getCamera(), glm::vec3(CAMERA_PAN_SPEED * deltaTime, 0.0, 0.0));
+            Car::setCamera(camera);
+        } else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            glm::mat4 camera = glm::translate(Car::getCamera(), glm::vec3(-CAMERA_PAN_SPEED * deltaTime, 0.0, 0.0));
+            Car::setCamera(camera);
+        }  
+
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
         for(std::vector<Car*>::iterator it = cars.begin(); it != cars.end();) {
