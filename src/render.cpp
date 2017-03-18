@@ -2,8 +2,12 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "shader.h"
 #include <stdio.h>
+
+const int POINT_START = 15;
+const int POINT_LENGTH = 1;
 
 GLuint Render::programID = 0;
 GLuint Render::MatrixID = 0;
@@ -43,4 +47,13 @@ void Render::renderLine(int start, int length, glm::mat4 MVP, glm::vec3 color) {
     glUniform3fv(ColorID, 1, &color[0]);
 
     glDrawArrays(GL_LINES, start, length); // 3 indices starting at 0 -> 1 triangle
+}
+
+void Render::renderPoint(glm::mat4 MVP, glm::vec3 color, float size) {
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniform3fv(ColorID, 1, &color[0]);
+
+    glPointSize(size);
+
+    glDrawArrays(GL_POINTS, POINT_START, POINT_LENGTH);
 }

@@ -9,6 +9,7 @@ public:
 
 	static void renderTri(int start, int length, glm::mat4 MVP, glm::vec3 color);
 	static void renderLine(int start, int length, glm::mat4 MVP, glm::vec3 color);
+    static void renderPoint(glm::mat4 MVP, glm::vec3 color, float size);
 private:
 	static GLuint programID; 
 	static GLuint MatrixID;

@@ -51,6 +51,8 @@ const GLfloat renderData[] = {
 //path
     0.0f , 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
+//point
+    0.0f, 0.0f, 0.0f
 };
 const int CAR_START = 0;
 const int CAR_LENGTH = 2*3;
@@ -148,16 +150,6 @@ int main(int argc, char* argv[]) {
         rotation = glm::vec3(0.0,0.0,0.0);
     }
     
-    /* Car myCar(path.front(), rotation); */
-    //Car car2(glm::vec3(0.0,5.0,0.0), glm::vec3(-1.0,1.0,0.0));
-    /* pCar = &myCar; */
- /*   std::vector<Wall> walls;
-    walls.push_back(Wall(glm::vec3(0.0,0.0,0.0), glm::vec3(15.0,5.0,0.0)));
-    walls.push_back(Wall(glm::vec3(15.0,5.0,0.0), glm::vec3(30.0,12.5,0.0)));
-    walls.push_back(Wall(glm::vec3(30.0,12.5,0.0), glm::vec3(35.0,10.0,0.0)));
-    walls.push_back(Wall(glm::vec3(35.0,10.0,0.0), glm::vec3(25.0,6.5,0.0)));
-    walls.push_back(Wall(glm::vec3(25.0,6.5,0.0), glm::vec3(0.0,0.0,0.0)));
-*/    
     int error = init();
     if (error != 0) {
         return error;
@@ -172,7 +164,7 @@ int main(int argc, char* argv[]) {
     /* GLuint ColorID = glGetUniformLocation(programID, "inColor"); */
     
     glm::mat4 Projection = glm::ortho(-50.0,50.0,-50.0,50.0,0.0,100.0); // In world coordinates
-    glm::mat4 View = glm::lookAt(glm::vec3(0,0,1), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    glm::mat4 View = glm::lookAt(glm::vec3(0,10,1), glm::vec3(0,10,0), glm::vec3(0,1,0));
     
     Car::setCamera(View);
     
@@ -227,7 +219,8 @@ int main(int argc, char* argv[]) {
     /* Car::setWatch(myCar); */
 
     /* int nextPoint = 1; */
-    NEAT::Population* Junk = carTest(5, &walls, &path, &distances, window);
+    NEAT::Population* pop = carTest(50, &walls, &path, &distances, window);
+   
     
     /* while(glfwWindowShouldClose(window) == 0) { */
         

@@ -30,6 +30,8 @@ const int WALL_LENGTH = 2*3;
 const int PATH_START = WALL_START + WALL_LENGTH;
 const int PATH_LENGTH = 2;
 
+const glm::vec3 NODE_OFFSET = glm::vec3 (30.0, -25.0, 0.0);
+
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
 const glm::vec3 WALL_COLOR = glm::vec3(1.0,0.0,0.0);
@@ -59,7 +61,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
         nbFrames++;        
         if ( currentTime - frameLastTime >= 1.0 ) {
             // printf and reset timer
-            printf("%f ms/frame\n", 1000.0/double(nbFrames));
+            /* printf("%f ms/frame\n", 1000.0/double(nbFrames)); */
             nbFrames = 0;
             frameLastTime += 1.0;
         }
@@ -100,7 +102,10 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                 }
 				input[i+1] = closest;
 				i++;
-                /* printf("Closest:%f\n",closest); */
+                
+                /* if (it == cars.begin()) { */
+                /*     printf("Closest:%f\n",closest); */
+                /* } */
                 
                 lIt->setDistance(closest);
             }
@@ -157,6 +162,24 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
             glm::mat4 wallMatrix = Projection * Car::getCamera() * walls->at(i).getMatrix();
 			Render::renderTri(WALL_START, WALL_LENGTH, wallMatrix, WALL_COLOR);
         }
+
+        std::vector<glm::vec3> neurons;
+        if (cars.size() > 0) {
+            NEAT::Organism* org = cars.at(0)->getOrganism();
+            if (org) {
+                NEAT::Network* network = org->net;
+
+                for (int i = 0; i < network->inputs.size(); i++) {
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), glm::vec3(i, 0.0f, 0.0f) + NODE_OFFSET);
+
+                    float color = network->inputs.at(network->inputs.size() - 1 - i)->activation; //backwards so it lines up visually.
+                    color = color < 0.0 ? 0.0 : 1 - color - 0.1;
+                    Render::renderPoint(pointMatrix, glm::vec3(0.1, 0.1 + color, 0.1), 5);
+                }
+            }
+        }
+    
+
         
         //finish drawing
         glfwSwapBuffers(window);

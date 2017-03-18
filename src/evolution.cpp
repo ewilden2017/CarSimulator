@@ -62,9 +62,17 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<
     
     std::vector<Car*> cars;
     
+    glm::vec3 rotation;
+    if (path->front() != path->at(1)) {
+        rotation = glm::normalize(path->at(1) - path->front());
+    } else {
+        rotation = glm::vec3(0.0,0.0,0.0);
+    }
+ 
+
     int highest = -1;
     for(currentOrg = (pop->organisms).begin(); currentOrg != (pop->organisms).end(); ++currentOrg) {
-        cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,1.0,0.0), *currentOrg));
+        cars.push_back(new Car(glm::vec3(0.0,0.0,0.0),rotation, *currentOrg));
     }
     carSimulation(cars, walls, path, distances, window);
     for(currentSpecies = (pop->species).begin(); currentSpecies != (pop->species).end(); ++currentSpecies) {
