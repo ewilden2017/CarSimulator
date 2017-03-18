@@ -1,6 +1,7 @@
 #include "simulation.h"
 
 #include <vector>
+#include <map>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -179,10 +180,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
             if (org) {
                 NEAT::Network* network = org->net;
 
-                for (int i = 0; i < network->inputs.size(); i++) {
-                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), glm::vec3(i, 0.0f, 0.0f) + NODE_OFFSET);
+                std::map<int, glm::vec3> nodes;
 
-                    float color = network->inputs.at(network->inputs.size() - 1 - i)->activation; //backwards so it lines up visually.
+                for (int i = 0; i < network->inputs.size(); i++) {
+                    NEAT::NNode* node = network->inputs.at(network->inputs.size() - 1 - i);
+                    glm::vec3 position = glm::vec3(i, 0.0f, 0.0f) + NODE_OFFSET;
+                    nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), position);
+
+                    float color = node->activation; //backwards so it lines up visually.
                     color = color < 0.0 ? 0.0 : 1 - color;
                     color = color < 0.1 ? color : color - 0.1;
 
@@ -198,19 +204,23 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                 }
 
                 for (int i = 0; i < network->outputs.size(); i++) {
-                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), glm::vec3(i, -1 * (network->max_depth() + 1), 0.0f) + NODE_OFFSET);
+                    NEAT::NNode* node = network->outputs.at(i);
+                    glm::vec3 position = glm::vec3(i, -1 * (network->max_depth() + 5), 0.0f) + NODE_OFFSET;
+                    nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), position);
 
-                    float color = network->outputs.at(i)->activation;
+                    float color = node->activation;
                     color = color < 0.0 ? 0.0 : 1 - color; 
                     color = color < 0.1 ? color : color - 0.1;
 
                     Render::renderPoint(pointMatrix, glm::vec3(0.1 + color, 0.1, 0.1), 5);
                 }
 
-                for (int i = 0; i < network->all_nodes.size(); i++) {
+                for (int i = network->inputs.size(); i < network->all_nodes.size() - network->outputs.size(); i++) {
                     NEAT::NNode* node = network->all_nodes.at(i);
-                    glm::vec3 position = glm::vec3(i, node->depth(0, network), 0.0);
-                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), position + NODE_OFFSET + glm::vec3(-30.0,0.0,0.0));
+                    glm::vec3 position = glm::vec3(i, node->depth(0, network), 0.0) + NODE_OFFSET;
+                    nodes.insert(std::pair<int, glm::vec3> (node->node_id, position));
+                    glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), position + glm::vec3(-30.0,0.0,0.0));
 
                     float color = node->activation;
                     color = color < 0.0 ? 0.0 : 1 - color;
@@ -218,6 +228,29 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 
                     Render::renderPoint(pointMatrix, glm::vec3(0.1, 0.1, 0.1 + color), 5);
                 }
+
+                for (std::vector<NEAT::NNode*>::iterator it = network->all_nodes.begin(); it != network->all_nodes.end(); it++) {
+                    std::vector<NEAT::Link*> outgoing = (*it)->outgoing;
+                    for (std::vector<NEAT::Link*>::iterator linkIt = outgoing.begin(); linkIt != outgoing.end(); linkIt ++) {
+                        NEAT::Link* link = (*linkIt);
+                        glm::vec3 inPoint = nodes.at(link->in_node->node_id);
+                        glm::vec3 outPoint = nodes.at(link->out_node->node_id);
+                        glm::vec3 line = outPoint - inPoint;
+
+                        double angle = atan2(line.y, line.x) - PI/2;
+
+                        glm::mat4 scale = glm::scale(glm::mat4(), glm::vec3(0.0,glm::distance(inPoint, outPoint),0.0));
+                        glm::mat4 translation = glm::translate(glm::mat4(), inPoint);
+                        glm::mat4 rotation = glm::rotate(glm::mat4(), (float) angle, UP);
+                        glm::mat4 model = translation * rotation * scale;
+
+                        glm::mat4 linkMatrix = Projection * Car::getCamera() * model;
+
+                        Render::renderLine(PATH_START, PATH_LENGTH, linkMatrix, glm::vec3(0.5, 0.5, 0.5));
+ 
+                    } 
+                }
+
             }
         }
     
