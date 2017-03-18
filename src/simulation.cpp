@@ -185,7 +185,14 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     float color = network->inputs.at(network->inputs.size() - 1 - i)->activation; //backwards so it lines up visually.
                     color = color < 0.0 ? 0.0 : 1 - color;
                     color = color < 0.1 ? color : color - 0.1;
-                    Render::renderPoint(pointMatrix, glm::vec3(0.1, 0.1 + color, 0.1), 5);
+
+                    glm::vec3 renderColor;
+                    if (i == network->inputs.size() - 1) {
+                        renderColor = glm::vec3(0.0, 0.0, 1.0);
+                    } else {
+                        renderColor = glm::vec3(0.1, 0.1 + color, 0.1);
+                    }
+                    Render::renderPoint(pointMatrix, renderColor, 5);
                 }
             }
         }
