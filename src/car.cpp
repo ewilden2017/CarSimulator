@@ -24,6 +24,7 @@ const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 
 std::vector<Car*> Car::carList;
 int Car::carCount = 0;
+int Car::selected = -1;
 
 glm::mat4 Car::Camera = glm::mat4(1.0);
 double Car::speedMulti = 1.0;
@@ -126,6 +127,9 @@ Car::~Car() {
     printf("destroying car %i\n", index);
 	/* Car::carList.at(index) = NULL; */
     Car::carCount--;
+    if (index == selected) {
+        selected = -1;
+    }
 }
 
 void Car::setWatch(Car& car) {
@@ -273,4 +277,22 @@ void Car::setSpeedMulti(double multi) {
 
 double Car::getSpeedMulti() {
 	return speedMulti;
+}
+
+void Car::setSelected(int car) {
+    if (car >= 0 && car < carCount) {
+        selected = car;
+    }
+}
+
+int Car::getSelected() {
+    if (selected >= 0 && selected < carCount) {
+        return selected;
+    } else {
+        return -1;
+    }
+}
+
+int Car::getCount() {
+    return carCount;
 }

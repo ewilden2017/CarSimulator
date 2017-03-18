@@ -60,6 +60,10 @@ public:
     
 	static void setSpeedMulti(double multi);
 	static double getSpeedMulti();
+
+    static void setSelected(int car);
+    static int getSelected();
+    static int getCount();
     
 private:
     double acceleration;
@@ -82,6 +86,7 @@ private:
     
     static std::vector<Car*> carList;
     static int carCount;
+    static int selected;
     
     static glm::mat4 Camera;
 	static double speedMulti;

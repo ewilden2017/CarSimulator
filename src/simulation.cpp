@@ -34,6 +34,7 @@ const glm::vec3 NODE_OFFSET = glm::vec3 (30.0, -25.0, 0.0);
 
 const glm::vec3 UP = glm::vec3(0.0,0.0,1.0);
 const glm::vec3 CAR_COLOR = glm::vec3(0.0,0.8,0.9);
+const glm::vec3 CAR_COLOR_SELECTED = glm::vec3(0.0, 1.0, 0.0);
 const glm::vec3 WALL_COLOR = glm::vec3(1.0,0.0,0.0);
 const glm::vec3 LINE_COLOR = glm::vec3(0.1,0.1,0.1);
 const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0), glm::vec3(5.0,5.0,5.0));
@@ -53,6 +54,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
     double oldTime = StartTime;
     
 	printf("starting\n");
+    Car::setSelected(0);
     while(cars.size() > 0 && time < 60 * 1 / Car::getSpeedMulti()) {
         time = glfwGetTime() - StartTime;
         
@@ -80,7 +82,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 			input[0] = 1.0;
             
             glm::mat4 carMatrix = Projection * Car::getCamera() * (*it)->getMatrix();
-			Render::renderTri(CAR_START, CAR_LENGTH, carMatrix, CAR_COLOR);
+           
+            glm::vec3 color;
+
+            if (Car::getSelected() > 0 && (*it) == cars.at(Car::getSelected())) {
+                color = CAR_COLOR_SELECTED;
+            } else {
+                color = CAR_COLOR;
+            }
+			Render::renderTri(CAR_START, CAR_LENGTH, carMatrix, color);
             
             std::vector<DetectLine> lines = (*it)->getLineList();
 			int i = 0;
@@ -164,8 +174,8 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
         }
 
         std::vector<glm::vec3> neurons;
-        if (cars.size() > 0) {
-            NEAT::Organism* org = cars.at(0)->getOrganism();
+        if (Car::getSelected() >= 0 && Car::getSelected() < cars.size()) {
+            NEAT::Organism* org = cars.at(Car::getSelected())->getOrganism();
             if (org) {
                 NEAT::Network* network = org->net;
 
@@ -173,7 +183,8 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     glm::mat4 pointMatrix = Projection * Car::getCamera() * glm::translate(glm::mat4(), glm::vec3(i, 0.0f, 0.0f) + NODE_OFFSET);
 
                     float color = network->inputs.at(network->inputs.size() - 1 - i)->activation; //backwards so it lines up visually.
-                    color = color < 0.0 ? 0.0 : 1 - color - 0.1;
+                    color = color < 0.0 ? 0.0 : 1 - color;
+                    color = color < 0.1 ? color : color - 0.1;
                     Render::renderPoint(pointMatrix, glm::vec3(0.1, 0.1 + color, 0.1), 5);
                 }
             }

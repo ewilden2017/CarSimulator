@@ -65,27 +65,23 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
-    if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_W) {
-            pCar->inputAccel(1);
+
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+        int next = Car::getSelected() - 1;
+        if (next < 0) {
+            next = Car::getCount() - 1;
         }
-        if (key == GLFW_KEY_S) {
-            pCar->inputAccel(-1);
-        }
-        if (key == GLFW_KEY_D) {
-            pCar->inputSteer(-1);
-        }
-        if (key == GLFW_KEY_A) {
-            pCar->inputSteer(1);
-        }
+        Car::setSelected(next);
+        printf("Selected, %i\n", Car::getSelected());
     }
-    if (action == GLFW_RELEASE) {
-        if (key == GLFW_KEY_W || key ==GLFW_KEY_S) {
-            pCar->inputAccel(0);
+    
+    if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+        int next = Car::getSelected() + 1;
+        if (next >= Car::getCount() - 1) {
+            next = 0;
         }
-        if (key == GLFW_KEY_D || key == GLFW_KEY_A) {
-            pCar->inputSteer(0);
-        }
+        Car::setSelected(next);
+        printf("Selected, %i\n", Car::getSelected());
     }
 }
 
