@@ -86,7 +86,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
            
             glm::vec3 color;
 
-            if (Car::getSelected() > 0 && (*it) == cars.at(Car::getSelected())) {
+            if (Car::getSelected() >= 0 && (*it) == cars.at(Car::getSelected())) {
                 color = CAR_COLOR_SELECTED;
             } else {
                 color = CAR_COLOR;
