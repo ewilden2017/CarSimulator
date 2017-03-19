@@ -25,6 +25,7 @@ public:
     
 	double pointDist;
 	double stuckTimer;
+    int nextPoint;
     //center, front vector
     Car(glm::vec3 center, glm::vec3 forward);
     Car(glm::vec3 center, glm::vec3 forward, NEAT::Organism* organism);

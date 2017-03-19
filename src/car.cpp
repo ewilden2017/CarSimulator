@@ -42,6 +42,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     
 	pointDist = 0;
 	stuckTimer = 0.0;
+    nextPoint = 1;
 
     forwardVector = forward;    
     speed = 0.0;
@@ -89,6 +90,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
     
 	pointDist = 0;
 	stuckTimer = 0.0;
+    nextPoint = 1;
 
     forwardVector = forward;    
     speed = 0.0;
