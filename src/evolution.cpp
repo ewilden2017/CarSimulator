@@ -28,22 +28,34 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::v
     int evals[NEAT::num_runs];  //Hold records for each run
     int genes[NEAT::num_runs];
     int nodes[NEAT::num_runs];
-    
-    std::ifstream inFile;
-	inFile.open("startgenes");
-    printf("Reading initial genes...\n");
-    inFile >> curword;
-    inFile >> id;
-    startGenome = new NEAT::Genome(1, inFile); //TODO FREE
-    inFile.close();
-    printf("Done.\n");
+ 
+    std::ifstream populationFile;
+    populationFile.open("population");
+    if (populationFile.good()) {
+        printf("Using population file.\n");
+        startGenome = NULL;
+        populationFile.close();
+    } else {
+        std::ifstream inFile;
+        inFile.open("startgenes");
+        printf("Reading initial genes...\n");
+        /* inFile >> curword; */
+        /* inFile >> id; */
+        startGenome = new NEAT::Genome(1, inFile); //TODO FREE
+        inFile.close();
+        printf("Done.\n");
+    }
     
     for (int run = 0; run < NEAT::num_runs; run++) {
         if (glfwWindowShouldClose(window) != 0) {
             break;
         }
         printf("Spawning Population\n");
-        pop = new NEAT::Population(startGenome,NEAT::pop_size);
+        if (startGenome != NULL) {
+            pop = new NEAT::Population(startGenome,NEAT::pop_size);
+        } else {
+            pop = new NEAT::Population("population");
+        }
         
         printf("Verifying Spawned Pop\n");
         pop->verify();
