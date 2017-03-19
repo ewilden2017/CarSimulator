@@ -208,14 +208,12 @@ void Car::update(double deltaTime, std::vector<Wall> walls) {
 
     double backAccel = speed * speed * BACK_FRICTION;
 
-    printf("Delta Speed: %f\n", backAccel * deltaTime);
     speed += (fabs(backAccel * deltaTime) > localSpeed ? -speed : -backAccel * deltaTime);
    
     if (localSpeed < MAX_SPEED * speedMulti) {
         speed += acceleration * deltaTime;
     }
     
-    printf("Speed: %f\n", speed);
     glm::mat4 oldModel = modelMatrix;
     glm::vec3 oldCenter = center;
     
