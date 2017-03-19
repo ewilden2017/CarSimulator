@@ -165,9 +165,16 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 				glm::vec3 totalDistance = path->at(lastPoint) - path->at(nextPoint);
 
                 double segmentFit = glm::dot(totalDistance, totalDistance)- glm::dot(distance, distance);
-                //If car is behind point, move it backwards on path.
+
+                int lastTwoPoint = lastPoint - 1;
+                lastTwoPoint = lastTwoPoint < 0 ? path->size() - 1 : lastTwoPoint;
+
+                glm::vec3 prevTotal = path->at(lastTwoPoint) - path->at(lastPoint);
+                glm::vec3 prevDistance = (*it)->getCenter() - path->at(lastTwoPoint);
                 glm::vec3 lastDistance = (*it)->getCenter() - path->at(lastPoint);
-                if (segmentFit < 0.0 && glm::dot(lastDistance, lastDistance) > distances->at(lastPoint)*distances->at(lastPoint)) {
+
+                //If car is behind point, move it backwards on path
+                if (glm::dot(prevTotal, prevTotal) - glm::dot(prevDistance, prevDistance) > segmentFit && glm::dot(lastDistance, lastDistance) > distances->at(lastPoint)*distances->at(lastPoint)) {
                     int newPoint = lastPoint;
                     int newLast = lastPoint - 1;
                     newLast = newLast < 1 ? path->size() - 1 : newLast;
@@ -176,12 +183,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     nextPoint = newPoint;
                     lastPoint = newLast;
 
-
                     totalDistance = path->at(lastPoint) - path->at(nextPoint);
-                    (*it)->pointDist -= glm::dot(totalDistance, totalDistance);
                     distance = (*it)->getCenter() - path->at(nextPoint);
+                    segmentFit = glm::dot(totalDistance, totalDistance)- glm::dot(distance, distance);
+
+                    (*it)->pointDist -= glm::dot(totalDistance, totalDistance);
                     segmentFit = glm::dot(totalDistance, totalDistance) - glm::dot(distance, distance);
                 }
+
+               
 				double newFit = (*it)->pointDist + segmentFit; //remember, distance is squared
 				double deltaFit = org->fitness - newFit;
 				if (deltaFit < 1 && deltaFit > -1) {
@@ -199,15 +209,23 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 
 				org->fitness = newFit;
 
-				if(glm::dot(distance, distance) < distances->at(nextPoint)*distances->at(nextPoint)) {
+                int checkPoint = nextPoint + 1;
+                checkPoint = checkPoint > path->size() - 1 ? 1 : checkPoint;
+                glm::vec3 nextDistance = (*it)->getCenter() - path->at(checkPoint);
+				glm::vec3 nextTotal = path->at(nextPoint) - path->at(checkPoint);
+
+
+
+				if(glm::dot(nextTotal, nextTotal) - glm::dot(nextDistance, nextDistance) > 0 && glm::dot(distance, distance) < distances->at(nextPoint)*distances->at(nextPoint)) {
 					(*it)->pointDist += glm::dot(totalDistance, totalDistance);
 					(*it)->nextPoint++;
 					if ((*it)->nextPoint > path->size() - 1) {
 						(*it)->nextPoint = 1;
-					}
-				}
- 
-				/* printf("Fitness: %f\n", org->fitness); */
+                    }
+                }
+
+
+                /* printf("Fitness: %f\n", org->fitness); */
 			}
 
 			if (increment) it++;
