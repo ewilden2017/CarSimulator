@@ -222,7 +222,6 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                         } else {
                             float color = node->activation * -0.8;
                             color = color < 0.0 ? 0.0 : 0.8 - color;
-                            printf("Color: %f\n", color);
 
                             renderColor = glm::vec3(color + 0.2,  0.2, 0.2);
                         }

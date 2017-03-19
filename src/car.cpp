@@ -196,7 +196,7 @@ void Car::update(double deltaTime, std::vector<Wall> walls) {
 	deltaTime *= speedMulti;
 
     //acceleration
-    acceleration = accelInput * ACCEL_FACTOR * deltaTime;
+    acceleration = accelInput * ACCEL_FACTOR;
     
     //steering
     float steerAngle = steering * STEER_FACTOR * deltaTime;
@@ -206,22 +206,21 @@ void Car::update(double deltaTime, std::vector<Wall> walls) {
     //speed
     double localSpeed = fabs(speed);
 
-    double backAccel = -speed * BACK_FRICTION * deltaTime;
-    /* if (localSpeed < 0.05) { */
-        /* backAccel *= 100.0; */
-    /* } */
+    double backAccel = speed * speed * BACK_FRICTION;
 
-    speed += (fabs(backAccel) > localSpeed ? -speed : backAccel);
-    
+    printf("Delta Speed: %f\n", backAccel * deltaTime);
+    speed += (fabs(backAccel * deltaTime) > localSpeed ? -speed : -backAccel * deltaTime);
+   
     if (localSpeed < MAX_SPEED * speedMulti) {
-        speed += acceleration;
+        speed += acceleration * deltaTime;
     }
     
+    printf("Speed: %f\n", speed);
     glm::mat4 oldModel = modelMatrix;
     glm::vec3 oldCenter = center;
     
     //movement
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0,speed,0.0));
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0,speed * deltaTime,0.0));
     modelMatrix = glm::rotate(modelMatrix, steerAngle, UP);
     
     

@@ -12,10 +12,10 @@ class Wall;
 #include "detectLine.h"
 
 //one unit is 1/50 of the screen
-const double ACCEL_FACTOR = 0.2; //units/sec^2
-const double MAX_SPEED = 1.0; //units/sec
-const double BACK_FRICTION = 0.5; //is multiplied by the current speed
-const double STEER_FACTOR = 5.0; //radians/sec
+const double ACCEL_FACTOR = 5.0; //units/sec^2
+const double MAX_SPEED = 10.0; //units/sec
+const double BACK_FRICTION = 0.02; //is multiplied by the current speed squared
+const double STEER_FACTOR = 3.14 / 2; //radians/sec
 
 const int MAX_CARS = 50;
 const int CAR_SCALE_FACTOR = 1;
