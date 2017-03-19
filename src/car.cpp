@@ -85,7 +85,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
     index = Car::carCount++;
     /* Car::carList.push_back(this); */
     
-    printf("Making car %i\n", index);
+    /* printf("Making car %i\n", index); */
     
 	pointDist = 0;
 	stuckTimer = 0.0;
