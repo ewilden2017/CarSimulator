@@ -3,7 +3,14 @@
 CarSim is a basic program that I wrote as an exercise in basic rendering, and implementing the (NEAT)[https://www.cs.ucf.edu/~kstanley/neat.html] library.
 
 #Building
-This project uses cmake.
+Download the code, and the submodules, with git:
+    git clone --recursive https://github.com/ewilden2017/CarSimulator
+    //or, to pull submodles after downloading:
+    git clone https://github.com/ewilden2017/CarSimulator
+    cd CarSimulator
+    git submodule update --init --recursive
+
+Then, build the project with cmake:
     mkdir build
     cd build
     cmake ..

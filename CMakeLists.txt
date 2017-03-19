@@ -56,18 +56,18 @@ if(BUILD_THIRD_PARTY)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs")
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation")
     set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target")
-    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glfw-3.1.2")
-    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glfw-3.1.2/include")
+    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glfw")
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glfw/include")
     set(LIBS ${LIBS} glfw ${GLFW_LIBRARIES})
 
     #GLEW
     set(BUILD_UTILS OFF CACHE BOOL "utilities")
-    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glew-1.13.0/build/cmake")
-    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glew-0.9.7.1/include")
+    add_subdirectory("${PROJECT_SOURCE_DIR}/thirdparty/glew-2.0.0/build/cmake")
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glew-2.0.0/include")
     set(LIBS ${LIBS} glew ${GLEW_LIBRARIES})
 
     #glm
-    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glm-0.9.7.1/glm")
+    include_directories("${PROJECT_SOURCE_DIR}/thirdparty/glm/glm")
 else()
     find_package(GLFW REQUIRED)
     include_directories(${GLFW_INCLUDE_DIRS})
