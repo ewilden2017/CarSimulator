@@ -131,6 +131,9 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     }
                 }
 				input[i+1] = closest;
+                if (closest == -1) {
+                    input[i+1] = 1;
+                }
 				i++;
                 
                 /* if (it == cars.begin()) { */
@@ -149,8 +152,10 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 			
 				std::vector<NEAT::NNode*>::iterator out_iter = net->outputs.begin();
 				double steering = (*out_iter)->activation;
+                steering = (steering * 2) - 1; //scale from -1 to 1
 				out_iter++;
 				double accel = (*out_iter)->activation;
+                accel = (accel * 2) - 1;
 
 				(*it)->input(accel, steering);
 
@@ -214,14 +219,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     if (i == network->inputs.size() - 1) {
                         renderColor = glm::vec3(0.0, 0.0, 1.0);
                     } else {
-                        if (node->activation > 0) {
-                            float color = node->activation * 0.8;
-                            color = color < 0.0 ? 0.0 : 0.8 - color;
+                        double value = node->get_active_out(); //already scaled from 0 to 1
+                        if (value > 0) {
+                            float color = value * 0.8;
+                            /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                             renderColor = glm::vec3(0.2, color + 0.2, 0.2);
                         } else {
-                            float color = node->activation * -0.8;
-                            color = color < 0.0 ? 0.0 : 0.8 - color;
+                            float color = value * -0.8;
+                            /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                             renderColor = glm::vec3(color + 0.2,  0.2, 0.2);
                         }
@@ -236,14 +242,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                     glm::mat4 pointMatrix = Projection * glm::translate(glm::mat4(), position);
 
                     glm::vec3 renderColor;
-                    if (node->activation > 0) {
-                        float color = node->activation * 0.8;
-                        color = color < 0.0 ? 0.0 : 0.8 - color;
+                    double value = (node->get_active_out() * 2) - 1;
+                    if (value > 0) {
+                        float color = value * 0.8;
+                        /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                         renderColor = glm::vec3(0.2, color + 0.2, 0.2);
                     } else {
-                        float color = node->activation * -0.8;
-                        color = color < 0.0 ? 0.0 : 0.8 - color;
+                        float color = value * -0.8;
+                        /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                             renderColor = glm::vec3(color + 0.2,  0.2, 0.2);
                     }
@@ -259,14 +266,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                         glm::mat4 pointMatrix = Projection * glm::translate(glm::mat4(), position);
 
                         glm::vec3 renderColor;
-                        if (node->activation > 0) {
-                            float color = node->activation * 0.8;
-                            color = color < 0.0 ? 0.0 : 0.8 - color;
+                        double value = (node->get_active_out() * 2) - 1;
+                        if (value > 0) {
+                            float color = value * 0.8;
+                            /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                             renderColor = glm::vec3(0.2, color + 0.2, 0.2);
                         } else {
-                            float color = node->activation * -0.8;
-                            color = color < 0.0 ? 0.0 : 0.8 - color;
+                            float color = value * -0.8;
+                            /* color = color < 0.0 ? 0.0 : 0.8 - color; */
 
                             renderColor = glm::vec3(color + 0.2,  0.2, 0.2);
                         }
@@ -286,7 +294,7 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
                             glm::vec3 line = outPoint - inPoint;
 
                             float inValue = fabs(link->in_node->activation) * 0.9;
-                            inValue = inValue < 0.0 ? 0.0 : 0.9 - inValue; 
+                            /* inValue = inValue < 0.0 ? 0.0 : 0.9 - inValue; */ 
 
                             glm::vec3 color;
                             if (link->weight > 0) {
