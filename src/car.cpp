@@ -200,7 +200,7 @@ void Car::update(double deltaTime, std::vector<Wall> walls) {
     
     //steering
     float steerAngle = steering * STEER_FACTOR * deltaTime;
-    steerAngle *= speed / (MAX_SPEED*speedMulti);
+    steerAngle *= speed / (MAX_SPEED);
     forwardVector = glm::rotate(forwardVector, steerAngle, UP);
     
     //speed
