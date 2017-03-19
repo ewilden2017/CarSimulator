@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
     /* Car::setWatch(myCar); */
 
     /* int nextPoint = 1; */
-    NEAT::Population* pop = carTest(50, &walls, &path, &distances, window);
+    NEAT::Population* pop = carTest(500, &walls, &path, &distances, window);
    
     
     /* while(glfwWindowShouldClose(window) == 0) { */
