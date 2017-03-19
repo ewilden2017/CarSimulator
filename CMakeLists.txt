@@ -39,6 +39,9 @@ configure_file(
 
 file(COPY "${PROJECT_SOURCE_DIR}/SimpleTransform.vertexshader" DESTINATION "${PROJECT_BINARY_DIR}")
 file(COPY "${PROJECT_SOURCE_DIR}/SingleColor.fragmentshader" DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY "${PROJECT_SOURCE_DIR}/params.ne" DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY "${PROJECT_SOURCE_DIR}/startgenes" DESTINATION "${PROJECT_BINARY_DIR}")
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/Generations")
 if(EXISTS "${PROJECT_SOURCE_DIR}/Walls.txt")
     file(COPY "${PROJECT_SOURCE_DIR}/Walls.txt" DESTINATION "${PROJECT_BINARY_DIR}")
 else()

@@ -91,8 +91,8 @@ int carEpoch(NEAT::Population* pop, int generation, char *filename, std::vector<
         (*currentSpecies)->compute_average_fitness();
         (*currentSpecies)->compute_max_fitness();
     }
-    
     if  ((generation % (NEAT::print_every) == 0)) {
+        printf("Printing...\n");
         pop->print_to_file_by_species(filename);
     }
 	double high = pop->highest_fitness;
