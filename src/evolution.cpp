@@ -55,7 +55,7 @@ NEAT::Population* carTest(int gens, std::vector<Wall>* walls, std::vector<glm::v
             printf("Generation %i\n", gen);
             
             char filename[50];
-            sprintf(filename, "Generations/gen_%i", gen);
+            sprintf(filename, "Generations/run_%i_gen_%i", run+1, gen);
             
             int highest = carEpoch(pop, gen, filename, walls, path, distances, window);
         }
