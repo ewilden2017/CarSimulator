@@ -38,7 +38,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     index = Car::carCount++;
     /* Car::carList.push_back(this); */
     
-    printf("Making car %i\n", index);
+    /* printf("Making car %i\n", index); */
     
 	pointDist = 0;
 	stuckTimer = 0.0;
@@ -124,7 +124,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
 }
 
 Car::~Car() {
-    printf("destroying car %i\n", index);
+    /* printf("destroying car %i\n", index); */
 	/* Car::carList.at(index) = NULL; */
     Car::carCount--;
     if (index == selected) {
