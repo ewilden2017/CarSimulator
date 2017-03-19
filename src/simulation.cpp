@@ -161,15 +161,15 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
 				double deltaFit = org->fitness - newFit;
 				if (deltaFit < 1 && deltaFit > -1) {
 					/* printf("Stuck: %i\n", (*it)->stuckTimer); */
-					(*it)->stuckTimer += 1;
+					(*it)->stuckTimer += 1 * deltaTime * Car::getSpeedMulti();
 
-					if ((*it)->stuckTimer > 500) {
+					if ((*it)->stuckTimer > 10.0) {
 						delete (*it);
 						it = cars.erase(it);
 						increment = 0;
 					}
 				} else {
-					(*it)->stuckTimer = 0;
+					(*it)->stuckTimer = 0.0;
 				}
 
 				org->fitness = newFit;

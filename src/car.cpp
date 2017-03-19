@@ -41,7 +41,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward) {
     printf("Making car %i\n", index);
     
 	pointDist = 0;
-	stuckTimer = 0;
+	stuckTimer = 0.0;
 
     forwardVector = forward;    
     speed = 0.0;
@@ -88,7 +88,7 @@ Car::Car(glm::vec3 newCenter, glm::vec3 forward, NEAT::Organism* newOrganism) {
     printf("Making car %i\n", index);
     
 	pointDist = 0;
-	stuckTimer = 0;
+	stuckTimer = 0.0;
 
     forwardVector = forward;    
     speed = 0.0;
