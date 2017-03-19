@@ -87,6 +87,35 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
         Car::setSelected(next);
         printf("Selected, %i\n", Car::getSelected());
     }
+
+    /* if (key == GLFW_KEY_H && action == GLFW_PRESS) { */
+    /*     std::vector<Car*> cars = Car::getCarList(); */
+    /*     int top = -1; */
+    /*     double highest = -10000000.0; */
+    /*     for (int i = 0; i < cars.size(); i++) { */
+    /*         printf("Size: %f\n", cars.at(i)->getOrganism()->fitness); */
+    /*         if (cars.at(i)->getOrganism()->fitness > highest) { */
+    /*            highest = cars.at(i)->getOrganism()->fitness; */
+    /*            top = i; */
+    /*         } */ 
+    /*     } */
+    /*     if (top > 0 && top < cars.size()) { */
+    /*         Car::setSelected(top); */
+    /*     } */
+    /* } else if (key == GLFW_KEY_L && action == GLFW_PRESS) { */
+    /*     std::vector<Car*> cars = Car::getCarList(); */
+    /*     int bottom = -1; */
+    /*     double lowest = 10000000.0; */
+    /*     for (int i = 0; i < cars.size(); i++) { */
+    /*         if (cars.at(i)->getOrganism()->fitness < lowest) { */
+    /*            lowest = cars.at(i)->getOrganism()->fitness; */
+    /*            bottom = i; */
+    /*         } */ 
+    /*     } */
+    /*     if (bottom > 0 && bottom < cars.size()) { */
+    /*         Car::setSelected(bottom); */
+    /*     } */
+    /* } */
 }
 
 int init() {
