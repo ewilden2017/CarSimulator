@@ -27,3 +27,4 @@ There are a few basic keyboard inputs:
 * ESC - closes the window
 * W,A,S,D - moves the camera
 * Q,E - cycles car selection
+* Z,X - zoom in and out

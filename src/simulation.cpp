@@ -42,6 +42,7 @@ const glm::vec3 LINE_COLOR = glm::vec3(0.1,0.1,0.1);
 const glm::mat4 SCALE_MATRIX = glm::scale(glm::mat4(1.0), glm::vec3(5.0,5.0,5.0));
 
 const double CAMERA_PAN_SPEED = 15.0;
+const double CAMERA_ZOOM_SPEED = 1.0;
 
 void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector<glm::vec3>* path, std::vector<double>* distances, GLFWwindow* window) {
     
@@ -88,7 +89,14 @@ void carSimulation(std::vector<Car*> cars, std::vector<Wall>* walls, std::vector
         } else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             glm::mat4 camera = glm::translate(Car::getCamera(), glm::vec3(-CAMERA_PAN_SPEED * deltaTime, 0.0, 0.0));
             Car::setCamera(camera);
-        }  
+        } 
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+            glm::mat4 camera = glm::scale(Car::getCamera(), glm::vec3(1+(CAMERA_ZOOM_SPEED * deltaTime)));
+            Car::setCamera(camera);
+        } else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+            glm::mat4 camera = glm::scale(Car::getCamera(), glm::vec3(1+(-CAMERA_ZOOM_SPEED * deltaTime)));
+            Car::setCamera(camera);
+        }
 
         glClear( GL_COLOR_BUFFER_BIT );
         //start drawing
